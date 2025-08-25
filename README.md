@@ -1,6 +1,8 @@
 ﻿Proyecto: Eco Moda
 
-Autores: Samuel Daza, Thomas Lopez, Esteban Navas, Samuel Velandia
+Autores: Samuel Daza, Thomas Lopez, Esteban Navas, Samuel Velandia 
+
+usuario: d4s60 link: https://github.com/d4s60
 
 
 Descripción General: Eco Moda es una plataforma web diseñada para facilitar la compra, venta, intercambio y donación de ropa de segunda mano en buen estado. Su objetivo es promover el consumo responsable, reducir el impacto ambiental de la industria textil y apoyar a comunidades vulnerables mediante el acceso gratuito o económico a prendas de vestir.
