@@ -50,3 +50,30 @@ Más donaciones y reuso de ropa → reducción de desechos textiles.
 Mayor lealtad y compromiso de usuarios.
 Visibilidad de impacto ambiental individual y colectivo.
 Círculo virtuoso: donar–comprar–reciclar–ahorrar.
+
+8.Verificación y Confianza
+Esto es fundamental para proteger la integridad del sistema de recompensas y garantizar que las acciones sean genuinas.
+Sistema de revisión de donaciones: Para que los puntos de donación sean válidos, se crearía un proceso de verificación.
+
+Flujo: El usuario sube una foto del comprobante de donación (ej. recibo de una ONG). Un equipo de moderadores o un modelo de IA revisaría la imagen para confirmar que el comprobante es válido. Solo después de esta verificación se otorgan los puntos al usuario.
+Prevención: Esto evita que los usuarios obtengan puntos fraudulentamente, lo que asegura que las recompensas se distribuyan de manera justa.
+Historial de transacciones detallado: En el perfil del usuario, se mostraría un historial completo de sus movimientos de puntos.
+
+Ejemplo:
+Fecha: 10/10/2025
+Motivo: Compra de camiseta
+Puntos: +25
+Estado: Completado
+Fecha: 01/10/2025
+Motivo: Canje de cupón
+Puntos: -50
+Estado: Canjeado
+
+- Justificación: La transparencia genera confianza. Un usuario que puede ver exactamente por qué ganó o perdió puntos se sentirá más seguro y valorado por la         plataforma.
+
+- Reseñas bidireccionales y verificadas: Las reseñas no se darían solo al vendedor o comprador. La plataforma habilitaría el sistema de calificación solo para los    usuarios que hayan participado en una transacción completa y verificada.
+
+- Dinámica: Para que se active la opción de reseña, la orden debe estar marcada como "entregada" por ambas partes. Si el comprador califica al vendedor, el           vendedor también debe tener la oportunidad de calificar al comprador.
+
+- Beneficio: Esto crea un sistema de confianza mutua y evita las reseñas malintencionadas o falsas. Los puntos de recompensa se pueden otorgar solo si ambas partes   han completado la reseña.
+
