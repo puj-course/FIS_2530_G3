@@ -1,0 +1,52 @@
+Documento de Recompensas de Usuario – Eco Moda
+1. Objetivo del sistema de recompensas
+Incentivar el consumo responsable y la donación/intercambio de ropa.
+Crear una cultura comunitaria de sostenibilidad.
+Alinear las acciones de los usuarios con los ODS 10, 11, 12 y 13.
+Reconocer a los usuarios que aportan de manera constante (ej. donantes frecuentes, compradores responsables, promotores de la app).
+
+2. Acciones que generan recompensas
+Donar ropa: +X puntos por prenda donada (con comprobante validado).
+Comprar prendas de segunda mano: +X puntos por cada compra, proporcional al monto.
+Intercambiar ropa (trueque): +X puntos por transacción completada.
+Recomendar la plataforma: +X puntos por cada amigo invitado que complete registro y publique o compre.
+Participar en campañas ecológicas: +X puntos por unirse a retos temáticos (ej. “Mes sin fast fashion”).
+Recibir buenas reseñas: +X puntos adicionales si como vendedor logras cierto nivel de satisfacción.
+
+3. Tipos de recompensas
+Económicas:
+Descuentos en comisiones o en prendas seleccionadas.
+Cupones de envío gratuito.
+Simbolicas y sociales:
+Distintivos en el perfil (badges: 🌱 “Donador Verde”, ♻️ “Héroe Circular”).
+Posicionamiento destacado en el ranking de usuarios.
+Certificados digitales de impacto ambiental (“Has reducido 15 kg de CO₂ con tus donaciones”).
+Experiencias:
+
+Acceso anticipado a campañas de ropa sostenible.
+Participación en sorteos especiales con ONGs aliadas.
+
+4. Niveles de usuario
+
+Bronce: hasta 100 puntos. (Usuario inicial).
+Plata: 101–500 puntos. (Usuario activo, acceso a cupones).
+Oro: 501–1000 puntos. (Acceso a descuentos mayores, prioridad en soporte).
+Diamante: +1000 puntos. (Embajador Eco Moda, visibilidad destacada en el catálogo, invitación a eventos).
+
+5. Gestión de recompensas
+Registro: cada acción se almacena en la colección rewards vinculada al usuario.
+Acumulación: saldo visible en perfil del usuario.
+Canje: puntos se pueden usar en compras, descuentos, o para obtener badges y beneficios.
+Caducidad: puntos expiran después de 12 meses si no se usan (incentiva el movimiento constante).
+
+6. Ejemplo de flujo
+Usuario dona 5 prendas → +50 puntos.
+Completa una compra por $80.000 → +80 puntos.
+Recibe 5 estrellas como vendedor → +20 puntos.
+Total acumulado: 150 puntos → Nivel Plata.
+
+7. Impacto esperado
+Más donaciones y reuso de ropa → reducción de desechos textiles.
+Mayor lealtad y compromiso de usuarios.
+Visibilidad de impacto ambiental individual y colectivo.
+Círculo virtuoso: donar–comprar–reciclar–ahorrar.
