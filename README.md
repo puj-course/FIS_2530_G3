@@ -2,6 +2,7 @@
 
 
 Autores: Samuel Daza, Thomas Lopez, Esteban Navas, Samuel Velandia
+
 Usuario: thomaslopezro Link: https://github.com/thomaslopezro
 Autores: Samuel Daza, Thomas Lopez, Esteban Navas, Samuel Velandia 
 
