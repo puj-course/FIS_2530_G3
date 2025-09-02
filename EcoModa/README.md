@@ -42,7 +42,7 @@ El sistema sigue una arquitectura cliente-servidor con enfoque modular. Se prior
 |------------------------|-----------------------------|
 | Lenguajes              | JavaScript, HTML, SQL       |
 | Backend                | Node.js                     |
-| Base de datos          | MongoDB, MySQL              |
+| Base de datos          | MySQL                       |
 | Infraestructura        | Railway                     |
 | Control de versiones   | Git, GitHub                 |
 | Metodología            | Scrum + Poker Planning      |
