@@ -30,7 +30,7 @@ El sistema sigue una arquitectura cliente-servidor con enfoque modular. Se prior
 
 - **Frontend**: HTML, JavaScript  
 - **Backend**: Node.js  
-- **Base de datos**: MongoDB y MySQL  
+- **Base de datos**: MySQL  
 - **Infraestructura**: Railway  
 - **Control de versiones**: Git y GitHub  
 
