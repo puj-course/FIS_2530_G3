@@ -1,0 +1,29 @@
+*Propuesta base de tablas (núcleo funcional Eco-Moda)
+
+usuarios (id, email, username, password_hash, rol_id, estado, last_login_at, created_at)
+
+roles (id, nombre) — seed: ADMIN, USER
+
+prendas (id, nombre, descripcion, categoria_id, talla_id, color_id, condicion_id, created_by, created_at)
+
+imagenes (id, prenda_id, url, orden)
+
+inventario (id, prenda_id, estado_inv_id, ubicacion, sku, created_at)
+
+estados_inventario (id, nombre) — p.ej. DISPONIBLE, RESERVADA, VENDIDA, DONADA
+
+donaciones (id, donante_id, fecha, estado, observacion)
+
+donacion_prenda (id, donacion_id, prenda_id) — (N:1 o 1:N según flujo)
+
+listings (id, prenda_id, precio, moneda, estado_pub, published_at)
+
+categorias (id, nombre)
+
+tallas (id, nombre)
+
+colores (id, nombre_hex/opcional)
+
+condiciones (id, nombre) — NUEVA, CASI NUEVA, BUENA, REGULAR
+
+auditoria_auth (id, user_id, tipo_evento, ip, user_agent, created_at)*
