@@ -1,0 +1,41 @@
+Propuesta base de relaciones (cardinalidad y regla referencial)
+
+usuarios (rol_id) → roles.id N:1, ON UPDATE RESTRICT, ON DELETE RESTRICT
+
+prendas.created_by → usuarios.id N:1, RESTRICT
+
+imagenes.prenda_id → prendas.id N:1, ON DELETE CASCADE
+
+inventario.prenda_id → prendas.id 1:1 (o 1:N si hay multi-sede), RESTRICT
+
+inventario.estado_inv_id → estados_inventario.id N:1, RESTRICT
+
+donaciones.donante_id → usuarios.id N:1, RESTRICT
+
+donacion_prenda.donacion_id → donaciones.id N:1, CASCADE
+
+donacion_prenda.prenda_id → prendas.id N:1, RESTRICT
+
+listings.prenda_id → prendas.id 1:1 (evitar listado duplicado), RESTRICT
+
+Catálogos (categoria_id, talla_id, color_id, condicion_id) en prendas: todas N:1, RESTRICT
+
+auditoria_auth.user_id → usuarios.id N:1, SET NULL (para preservar trazas si se borra el usuario)
+
+Índices propuestos (primer pase)
+
+Únicos: usuarios.email, usuarios.username
+
+Búsqueda: listings(precio), listings(estado_pub), prendas(categoria_id), inventario(estado_inv_id), prendas(created_at), usuarios(created_at)
+
+FK lookup: índices implícitos en cada *_id (crear si el motor no los añade)
+
+Vistas iniciales
+
+vw_usuarios_admin (id, email, username, rol, estado, created_at, last_login_at)
+
+vw_inventario_resumen (prenda, categoria, talla, estado_inv, sku, ubicacion)
+
+vw_donaciones_detalle (donacion_id, donante, fecha, prenda, condicion, estado)
+
+vw_prendas_en_venta (prenda, categoria, talla, precio, estado_pub, published_at)
