@@ -39,3 +39,4 @@ vw_inventario_resumen (prenda, categoria, talla, estado_inv, sku, ubicacion)
 vw_donaciones_detalle (donacion_id, donante, fecha, prenda, condicion, estado)
 
 vw_prendas_en_venta (prenda, categoria, talla, precio, estado_pub, published_at)
+..
