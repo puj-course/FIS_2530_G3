@@ -69,7 +69,8 @@ Motivo: Canje de cupón
 Puntos: -50
 Estado: Canjeado
 
-- Justificación: La transparencia genera confianza. Un usuario que puede ver exactamente por qué ganó o perdió puntos se sentirá más seguro y valorado por la         plataforma.
+- Justificación: La transparencia genera confianza. Un usuario que puede ver exactamente por qué ganó o perdió puntos se sentirá más seguro y valorado por la         
+plataforma..
 
 - Reseñas bidireccionales y verificadas: Las reseñas no se darían solo al vendedor o comprador. La plataforma habilitaría el sistema de calificación solo para los    usuarios que hayan participado en una transacción completa y verificada.
 
