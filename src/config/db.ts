@@ -1,14 +1,14 @@
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
-export async function connectDB() {
-  const uri = process.env.MONGO_URI || "mongodb://localhost:27017/ecomoda";
-  try {
-    await mongoose.connect(uri);
-    console.log("✅ MongoDB conectado:", uri);
-  } catch (err) {
-    console.error("❌ Error conectando a MongoDB:", err);
-    process.exit(1);
+import mongoose from "mongoose";
+
+const MONGO_URI = process.env.MONGO_URI || "";
+
+export const connectDB = async () => {
+  if (!MONGO_URI.startsWith("mongodb")) {
+    throw new Error("MONGO_URI vacío o inválido. Revisa tu .env");
   }
-}
+  await mongoose.connect(MONGO_URI);
+  console.log("✅ MongoDB conectado:", MONGO_URI.split("@")[1]); 
+};
