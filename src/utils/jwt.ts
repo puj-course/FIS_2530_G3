@@ -1,4 +1,3 @@
-// src/utils/jwt.ts
 import jwt, { Secret, SignOptions } from "jsonwebtoken";
 
 const SECRET: Secret = process.env.JWT_SECRET ?? "change-me";

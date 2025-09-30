@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { verifyJwt } from "../utils/jwt";
 
 export interface AuthPayload {
-  sub: string;           // user id
+  sub: string;           
   username: string;
   role: "ADMIN" | "USER";
 }
@@ -18,7 +18,7 @@ export function auth(req: Request, res: Response, next: NextFunction) {
 
     const payload = verifyJwt<AuthPayload>(token);
     // guarda el payload para siguientes handlers
-    (req as any).user = payload; // simple; si quieres tipar fuerte, hacemos un d.ts
+    (req as any).user = payload; 
 
     return next();
   } catch {
