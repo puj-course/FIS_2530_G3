@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Eco Moda — Iniciar sesión</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Página de inicio de sesión de Eco Moda.">
+</head>
+<body>
+  <h1>Eco Moda</h1>
+  <p>Inicia sesión para acceder a tu cuenta.</p>
+
+  <form action="/login" method="post">
+    <div>
+      <label for="identifier">Usuario o correo electrónico</label>
+      <input id="identifier" name="identifier" type="text" autocomplete="username" required>
+    </div>
+
+    <div>
+      <label for="password">Contraseña</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" minlength="6" required>
+    </div>
+
+    <div>
+      <input id="remember" name="remember" type="checkbox">
+      <label for="remember">Recuérdame</label>
+    </div>
+
+    <div>
+      <button type="submit">Iniciar sesión</button>
+    </div>
+
+    <p><a href="/recuperar">¿Olvidaste tu contraseña?</a></p>
+    <p>¿Aún no tienes cuenta? <a href="/registro">Registrarse</a></p>
+  </form>
+</body>
+</html>
