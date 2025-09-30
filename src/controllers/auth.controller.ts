@@ -1,4 +1,3 @@
-// src/controllers/auth.controller.ts
 import { Request, Response } from "express";
 import { registerSchema, loginSchema } from "../validators/auth.schema";
 import { User } from "../models/user.model";
