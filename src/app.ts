@@ -1,14 +1,14 @@
 import express from "express";
-import dotenv from "dotenv";
+import helmet from "helmet";
+import cors from "cors";
 import authRoutes from "./routes/auth.routes";
 
-dotenv.config();
 const app = express();
-
-// 🔑 Necesario para leer JSON en el body
+app.use(helmet());
+app.use(cors());
 app.use(express.json());
 
-// Rutas
-app.use("/api/auth", authRoutes);
+// 👇 usa este prefijo si quieres /auth/...
+app.use("/auth", authRoutes);
 
 export default app;

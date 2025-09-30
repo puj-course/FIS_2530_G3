@@ -1,14 +1,34 @@
-// src/routes/auth.routes.ts
 import { Router } from "express";
-import { register } from "../controllers/auth.controller";
+import { register, login, me } from "../controllers/auth.controller";
+import { auth, requireRole } from "../middlewares/auth.middleware";
 
 const router = Router();
 
 router.post("/register", (req, res) =>
-  register(req, res).catch(err => {
+  register(req, res).catch((err) => {
     console.error("❌ Error en /auth/register:", err);
     res.status(500).json({ message: "Error interno" });
   })
 );
 
-export default router; // 👈 importante
+router.post("/login", (req, res) =>
+  login(req, res).catch((err) => {
+    console.error("❌ Error en /auth/login:", err);
+    res.status(500).json({ message: "Error interno" });
+  })
+);
+
+// 👉 protegida: requiere token
+router.get("/me", auth, (req, res) =>
+  me(req, res).catch((err) => {
+    console.error("❌ Error en /auth/me:", err);
+    res.status(500).json({ message: "Error interno" });
+  })
+);
+
+// 👉 ejemplo de ruta solo ADMIN
+router.get("/admin/ping", auth, requireRole("ADMIN"), (_req, res) => {
+  res.json({ ok: true, msg: "Hola ADMIN 👋" });
+});
+
+export default router;
