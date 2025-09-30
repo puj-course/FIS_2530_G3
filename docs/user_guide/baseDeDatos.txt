@@ -1,0 +1,282 @@
+# Opción 1 — Base de datos NoSQL (MongoDB)
+
+1. Justificación
+
+Flexibilidad de esquema: las fichas de prendas pueden variar (talla, materiales, estado, tags, fotos). No requiere migraciones al cambiar atributos.
+ Velocidad de iteración (MVP): permite lanzar y ajustar el producto rápido.
+ Búsqueda y filtros ricos: texto, etiquetas, rangos de precio, y ubicación (geo-queries) para conectar personas por cercanía.
+ Escalabilidad horizontal: adecuada para catálogos grandes y alto tráfico de lectura.
+
+ 2. Alcance de datos
+
+ Catálogo y publicaciones (prendas, fotos, tags, ubicación).
+ Usuarios y perfiles (roles comprador/vendedor/admin).
+ Transacciones livianas (órdenes iniciales del MVP).
+ Donaciones y recompensas (registro y trazabilidad básica).
+ Mensajería entre usuarios (soporte a negociación/trueque).
+ Reputación y reviews (confianza en la comunidad).
+ Auditoría de eventos (seguridad y cambios críticos).
+
+ 3. Modelo de colecciones (sin código)
+
+3.1 `users`
+
+Propósito: perfiles, autenticación y reputación.
+
+ Campos clave: \_id, nombre, apellido, username, email (único), teléfono, rol (comprador|vendedor|admin), ciudad/pais, ubicación {lat,lng}, estado (activo|suspendido), fechaRegistro, preferencias (tallas, estilos, notificaciones), reputación {ratingPromedio, totalReviews}.
+ Relaciones: vendedor en `items`; comprador en `orders`; emisor/receptor en `messages`; autor/objeto en `reviews`.
+ Cardinalidad: 1 usuario ↔ N items, N orders, N reviews.
+
+ 3.2 `items`
+
+Propósito: catálogo de prendas/publicaciones.
+
+ Campos clave: \_id, sellerId(→users), título, descripción, categoría, talla, género (opc.), medidas (opc.), estadoPrenda (nuevo|comoNuevo|usado|vintage), materiales, precio, moneda, stock (usualmente 1), fotos\[], videoUrl (opc.), tags\[], ubicación {ciudad, geoPoint}, estadoPublicación (activa|pausada|vendida), createdAt.
+ Relaciones: referencia a `users` (sellerId); aparece en `orders` y `donations`.
+ Cardinalidad: 1 vendedor ↔ N publicaciones; 1 item ↔ 0..N órdenes (histórico).
+
+ 3.3 `orders`
+
+Propósito: compras/trueques del MVP.
+
+ Campos clave: \_id, buyerId(→users), items\[{itemId, qty, price, sellerId}], total, moneda, estado (pagado|enviado|entregado|cancelado|devuelto), direcciónEnvio {texto, ciudad, geoPoint}, pago {proveedor, status, referencia}, timeline\[{evento, fecha, actorId}], createdAt.
+ Relaciones: buyerId (comprador), items\[].sellerId (vendedores), referencia a `items`.
+ Cardinalidad: 1 comprador ↔ N órdenes; 1 orden ↔ N items.
+
+ 3.4 `donations`
+
+Propósito: registro de donaciones y comprobantes.
+
+ Campos clave: \_id, donorId(→users), receptor {tipo (fundación|usuario), id}, items\[{itemId}], comprobanteUrl, notas, createdAt.
+ Relaciones: donorId y receptor.id (→users u orgs); items (→items).
+ Cardinalidad: 1 donante ↔ N donaciones.
+ 3.5 `rewards`
+
+Propósito: puntos y recompensas por acciones (donar, vender responsable, retos ODS).
+
+ Campos clave: \_id, userId(→users), puntos (+/-), motivo (pedido|donación|reto), referencia {tipo, id}, saldoAcumulado, createdAt.
+ Relaciones: userId (→users), referencia a entidades.
+ Cardinalidad: 1 usuario ↔ N movimientos de puntos.
+
+3.6 `messages`
+
+Propósito: chat privado para negociar/coordinar.
+
+ Campos clave: \_id, convoId, from(→users), to(→users), contenido, adjuntos\[], createdAt, leído (bool).
+ Relaciones: usuarios involucrados; opcionalmente `items` (contexto).
+ Cardinalidad: 1 conversación ↔ N mensajes.
+ 3.7 `reviews`
+
+Propósito: reputación y confianza.
+
+ Campos clave: \_id, orderId(→orders), reviewerId(→users), reviewedUserId(→users), rating (1–5), comentario, createdAt.
+ Relaciones: vincula orden y usuarios (quién califica a quién).
+ Cardinalidad: 1 orden ↔ 0..2 reviews (para cada contraparte).
+
+ 3.8 `events_audit`
+
+Propósito: trazabilidad y seguridad (event-sourcing ligero).
+
+ Campos clave: \_id, actorId(→users), type (CREATE|UPDATE|DELETE|WEBHOOK), entity (users|items|orders|donations|rewards), entityId, payload (cambios), createdAt, ip.
+ Relaciones: referencia genérica a entidades.
+ Cardinalidad: N eventos por entidad.
+
+> Nota: Para organizaciones receptoras (fundaciones), puedes incluirlas en `users` con rol `org` o crear colección `organizations` si necesitas atributos específicos.
+
+ 4. Reglas de negocio (clave)
+
+ Publicación: sólo `items.estadoPublicación=activa` son visibles; cambio a `vendida` al cerrar una orden.
+ Stock único: si `stock=1`, al reservar/ordenar se bloquea el item (estado `pausada` o flag `reservado`).
+ Donaciones & recompensas: cada donación genera un movimiento en `rewards`; puntos canjeables por descuentos o badges.
+ Mensajería segura: sólo entre comprador y vendedor de un item, o entre donante y receptor de donación.
+ Reviews: sólo usuarios que participaron en una orden pueden calificar; una review por usuario/orden/rol.
+
+ 5. Índices recomendados (conceptuales)
+
+ Búsqueda catálogo: categoría, talla, precio, createdAt; índice de texto en título+descripción+tags.
+ Geolocalización: índice 2dsphere en `items.ubicacion.geoPoint` para “cerca de mí”.
+ Relacionales: items.sellerId; orders.buyerId y orders.items.sellerId; reviews.reviewedUserId.
+ Auditoría: events\_audit.entity+entityId (para reconstruir historial rápido..
+
+ 6. Validación y consistencia
+
+ Validación de esquema (JSON Schema/validators) para asegurar campos mínimos (ej. título, precio, estadoPrenda).
+ Trnsacciones puntuales (multi-documento) para casos críticos: confirmación de orden + cambio de estado de item + registro de rewards.
+ Idempotencia de webhooks (pagos): registrar `eventId` en `events_audit` para evitar duplicados.
+
+ 7. Flujo de datos (resumen)
+
+1. Publicar prenda: `users` crea `items` (activa).
+2. Descubrimiento: filtros por categoría/talla/precio, búsqueda por texto y/o cercanía.
+3. Compra/trueque: se crea `orders`; item se marca reservado/vendido; se notifica por `messages`.
+4. Entrega y review: al confirmar, se habilita `reviews` y se registran `rewards`.
+5. Donación: `donations` + comprobante; genera movimiento en `rewards`.
+6. Auditoría: cada acción relevante crea un `events_audit`.
+
+ 8. Seguridad y cumplimiento
+
+ Autenticación: contraseñas con hash robusto; sesiones cortas; 2FA opcional.
+ Autorización: políticas por rol (admin, vendedor, comprador, org).
+ PII: datos sensibles minimizados; cifrado en reposo del proveedor; control de acceso a backups.
+ Moderación: flag en `items` y `users.status`; registro en `events_audit`.
+
+ 9. Operación, copias y crecimiento
+
+ Backups automáticos diarios con retención (7/14/30 días).
+ Entornos: dev / staging / prod separados.
+ Observabilidad: métricas (errores, latencias, tamaño de colecciones), alertas por crecimiento anómalo.
+ Escalado: sharding por ubicación (ciudad/país) o por vendedor si el catálogo crece mucho.
+ Data warehouse (futuro): exportar a BigQuery/ClickHouse para analítica ODS y reporting avanzado.
+
+---
+# Opción 2 — Base de datos MySQL 
+
+1. Justificación
+El modelo de datos MySQL es una opción buena para el proyecto, ya que otorga una estructura segura y bien definida. La representación de entidades en tablas con relaciones claras (gracias a las llaves primarias y foráneas) garantiza la integridad referencial y evita la inconsistencia de los datos. Además, la compatibilidad con las transacciones ACID (Atomicidad, Consistencia, Aislamiento y Durabilidad) lo hace perfecto para procesos críticos como pagos, inventario y donaciones. Ademas, la estructurada de MySQL y el uso de SQL facilita la generación de informes y estadísticas, por ejemplo, para identificar las prendas más donadas o analizar las ventas por categoría.
+
+2. Alcance de datos
+El modelo de datos relacional cubre las siguientes áreas del proyecto:
+Catálogo y publicaciones: Información sobre prendas, fotos, etiquetas y su ubicación.
+Usuarios y perfiles: Datos de usuarios con roles de comprador, vendedor y administrador.
+Transacciones: Órdenes, que representan las compras y los trueques.
+Donaciones y recompensas: Registro y trazabilidad de los puntos y recompensas.
+Mensajería: Comunicación entre usuarios para negociar o coordinar.
+Reputación y reseñas: Sistema de confianza basado en las calificaciones y comentarios.
+Auditoría de eventos: Registro de seguridad para cambios críticos en el sistema.
+
+3. Modelo de tablas
+
+3.1 users
+Propósito: Almacenar perfiles de usuario, su información de autenticación y reputación.
+Campos clave:
+id: Identificador único (clave primaria).
+username, email: Campos obligatorios y únicos.
+rol: Define los permisos del usuario (comprador, vendedor, admin).
+ubicacion: Coordenadas geográficas (lat, lng).
+reputacion: Almacena el rating promedio y el total de reseñas.
+Relaciones: Es referenciado por las tablas items, orders, messages y reviews.
+Cardinalidad: Un usuario puede tener múltiples items, orders y reviews.
+
+3.2 items
+Propósito: Contener el catálogo de prendas y publicaciones.
+Campos clave:
+id: Clave primaria.
+seller_id: Clave foránea que enlaza con la tabla users.
+estado_prenda: Describe la condición de la prenda.
+estado_publicacion: Controla la visibilidad (activa, pausada, vendida).
+Relaciones: Referencia a la tabla users a través de seller_id. Es referenciado por order_items y donations.
+Cardinalidad: Un vendedor puede tener muchas publicaciones, y un ítem puede aparecer en múltiples órdenes (historial).
+
+3.3 orders
+Propósito: Gestionar compras y trueques.
+Campos clave:
+id: Clave primaria.
+buyer_id: Clave foránea que se relaciona con la tabla users.
+total: Monto total de la orden.
+estado: Describe el progreso de la transacción (pagado, enviado, entregado, etc.).
+Relaciones: Referencia a users. Es referenciada por order_items y reviews.
+Cardinalidad: Un comprador puede realizar muchas órdenes, y una orden contiene múltiples ítems.
+
+3.4 donations
+Propósito: Registrar las donaciones.
+Campos clave:
+id: Clave primaria.
+donor_id: Clave foránea a users.
+receptor_id: Clave foránea que puede referenciar a un usuario o a una organización.
+comprobante_url: URL del comprobante de la donación.
+Relaciones: Se enlaza con users (donante y receptor) y con items.
+Cardinalidad: Un donante puede hacer múltiples donaciones.
+
+3.5 rewards
+Propósito: Almacenar los movimientos de puntos y recompensas.
+Campos clave:
+id: Clave primaria.
+user_id: Clave foránea a users.
+motivo: Describe la razón de la recompensa (pedido, donacion, reto).
+referencia_id: Vincula el movimiento de puntos con la entidad de origen.
+Relaciones: Referencia a users y a otras tablas.
+Cardinalidad: Un usuario puede tener múltiples movimientos de puntos.
+
+3.6 messages
+Propósito: Facilitar la mensajería privada.
+Campos clave:
+id: Clave primaria.
+conversation_id: Agrupa los mensajes.
+from_id, to_id: Claves foráneas a users para los participantes del chat.
+Relaciones: Referencia a users.
+Cardinalidad: Una conversación tiene muchos mensajes.
+
+3.7 reviews
+Propósito: Construir la reputación y confianza de la comunidad.
+Campos clave:
+id: Clave primaria.
+order_id: Clave foránea a orders.
+reviewer_id, reviewed_user_id: Claves foráneas a users para el emisor y el receptor de la reseña.
+rating: Puntuación de 1 a 5.
+Relaciones: Enlaza a orders y users.
+Cardinalidad: Una orden puede tener hasta dos reseñas (una por cada contraparte).
+
+3.8 events_audit
+Propósito: Proporcionar trazabilidad y seguridad mediante un registro de eventos.
+Campos clave:
+id: Clave primaria.
+actor_id: Clave foránea a users (quién realizó la acción).
+type: Tipo de evento (CREATE, UPDATE, DELETE, etc.).
+entity, entity_id: Identifican el objeto y la tabla afectados.
+Relaciones: Referencia a users y a otras tablas.
+Cardinalidad: Una entidad puede tener múltiples eventos de auditoría
+
+4. Reglas de negocio (clave)
+Publicación: Solo los registros en la tabla items con el campo estado_publicacion establecido en 'activa' serán visibles en el catálogo. Este campo se actualiza a 'vendida' cuando una orden se completa.
+
+Stock único: Si el stock de un ítem es 1, la lógica de la aplicación debe actualizar su estado_publicacion a 'pausada' cuando se inicia un proceso de compra o reserva, evitando que otros usuarios lo adquieran simultáneamente.
+
+Donaciones y recompensas: Cada vez que se inserta un registro en la tabla donations, se debe insertar un registro correspondiente en la tabla rewards para el usuario que realizó la donación.
+
+Mensajería segura: La lógica de la aplicación debe verificar que solo los usuarios vinculados por una transacción (buyer_id y seller_id en orders) o por una donación (donor_id y receptor_id en donations) pueden intercambiar mensajes.
+Reseñas: Las reseñas solo pueden ser creadas por usuarios que hayan participado en una orden. Esto se valida en la aplicación, utilizando los datos de las tablas orders y reviews.
+
+5. Índices recomendados (conceptuales)
+Los índices son importantes para optimizar el rendimiento de las consultas y las búsquedas en la base de datos.
+
+Búsqueda en el catálogo: Se recomienda crear índices en las columnas categoria, talla, precio y created_at de la tabla items. Además, un índice de texto completo (FULLTEXT) en los campos titulo y descripcion es ideal para búsquedas eficientes.
+Geolocalización: MySQL soporta la búsqueda por coordenadas geográficas. Se pueden utilizar índices espaciales en los campos de ubicación (lat, lng) en la tabla items para la funcionalidad "cerca de mí".
+
+Relaciones: Los índices en las llaves foráneas (seller_id en items, buyer_id en orders y reviewed_user_id en reviews) mejoran el rendimiento de las uniones (JOIN) y la búsqueda de datos relacionados.
+
+Auditoría: Un índice en events_audit por entity y entity_id acelera la reconstrucción de historiales de cambios para una entidad específica.
+
+6. Validación y Consistencia
+
+Validación de esquema: MySQL aplica la validación de esquema a nivel de base de datos para asegurar que los campos obligatorios se llenen y que los tipos de datos sean correctos (por ejemplo, el campo rating en reviews debe ser un número entre 1 y 5).
+
+Transacciones atómicas: MySQL soporta transacciones ACID, lo que permite agrupar operaciones críticas como una compra. Esto significa que la inserción de una orden, la inserción de los ítems de la orden y la actualización del estado del ítem se realizan en una sola operación atómica. Si una parte falla, toda la transacción se revierte, garantizando la consistencia de los datos.
+
+Idempotencia de webhooks: Para evitar duplicados en los registros de pagos, se utiliza el campo eventId en la tabla events_audit. Antes de procesar un pago, la aplicación verifica si el eventId ya existe.
+
+7. Flujo de datos 
+Este flujo de trabajo describe las interacciones clave con la base de datos para cada acción del usuario.
+Publicar una prenda: Un usuario (users) inserta un nuevo registro en la tabla items, estableciendo el estado_publicacion a 'activa'.
+Descubrimiento: Las consultas (SELECT) se ejecutan en las tablas items, item_fotos y item_tags, utilizando índices en campos como categoria, talla, precio o la búsqueda de texto completo para mostrar los resultados al usuario.
+Compra/Trueque: Se inicia una transacción ACID. Se inserta una nueva fila en la tabla orders y, simultáneamente, se insertan registros en la tabla order_items para cada artículo en la orden. El estado_publicacion del ítem se actualiza a 'vendida' o 'pausada'.
+Entrega y Reseña: Tras la confirmación de la entrega, la aplicación permite al comprador y al vendedor (reviews) insertar un registro en la tabla reviews. Esta acción también desencadena una actualización en la tabla rewards para el usuario correspondiente.
+Donación: Se inserta un registro en la tabla donations y se crea un movimiento de puntos en la tabla rewards.
+Auditoría: Cada acción relevante (crear, actualizar, eliminar, etc.) genera un nuevo registro en la tabla events_audit para garantizar la trazabilidad.
+
+8. Seguridad y Cumplimiento
+La seguridad se gestiona en la capa de la aplicación, pero el modelo de datos de MySQL contribuye a ella:
+Autenticación: Las contraseñas se almacenan con un hash robusto.
+Autorización: Las políticas de acceso se definen en el código, basándose en el campo rol de la tabla users para determinar qué acciones puede realizar cada usuario.
+PII (Información de Identificación Personal): Se minimiza la información sensible y se utiliza el cifrado del proveedor para la información en reposo. El acceso a las copias de seguridad también se controla estrictamente.
+Moderación: Un campo estado en las tablas items y users permite a los administradores marcar contenido o usuarios para su revisión o suspensión.
+
+9. Operación, Copias y Crecimiento
+Copias de seguridad: MySQL permite configurar backups automáticos y programados con políticas de retención.
+Entornos: Los entornos de desarrollo, prueba y producción (dev, staging, prod) se mantienen separados y con bases de datos independientes.
+Observabilidad: MySQL cuenta con herramientas de monitoreo y métricas integradas para supervisar el rendimiento, la latencia y el crecimiento de las tablas.
+Escalado: Para manejar un gran volumen de datos, MySQL soporta técnicas como el sharding o la partición por ubicación, lo que distribuye el catálogo en múltiples servidores.
+<<<<<<< HEAD:EcoModa/docs/user_guide/baseDeDatos.txt
+Data Warehouse: Para el análisis avanzado, se pueden configurar procesos de exportación a soluciones especializadas como Google BigQuery o ClickHouse.
+=======
+Data Warehouse: Para el análisis avanzado, se pueden configurar procesos de exportación a soluciones especializadas como Google BigQuery o ClickHouse.
+>>>>>>> thomas:docs/user_guide/baseDeDatos.txt
