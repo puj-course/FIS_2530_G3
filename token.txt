@@ -1,0 +1,1 @@
+{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OGRhYWI5MGUyZjYwOWE2MmEyODViNjQiLCJ1c2VybmFtZSI6InRob21hczAxIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NTkxOTQ2NTUsImV4cCI6MTc1OTI4MTA1NX0.UvKDpYQlkpekVLkPbCDiLSt6B29LLrcDJ7419AlAd90","user":{"id":"68daab90e2f609a62a285b64","username":"thomas01","email":"thomas01@example.com","role":"USER"}}
