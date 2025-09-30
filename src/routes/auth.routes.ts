@@ -18,7 +18,6 @@ router.post("/login", (req, res) =>
   })
 );
 
-// 👉 protegida: requiere token
 router.get("/me", auth, (req, res) =>
   me(req, res).catch((err) => {
     console.error("❌ Error en /auth/me:", err);
@@ -26,7 +25,6 @@ router.get("/me", auth, (req, res) =>
   })
 );
 
-// 👉 ejemplo de ruta solo ADMIN
 router.get("/admin/ping", auth, requireRole("ADMIN"), (_req, res) => {
   res.json({ ok: true, msg: "Hola ADMIN 👋" });
 });
