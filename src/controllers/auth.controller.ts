@@ -1,68 +1,87 @@
+// src/controllers/auth.controller.ts
 import { Request, Response } from "express";
+import { User } from "../models/user.model";   // <- named import
+import { Role } from "../models/role.model";   // <- named import
 import { registerSchema, loginSchema } from "../validators/auth.schema";
-import { User } from "../models/user.model";
-import { Role } from "../models/role.model";
 import { hashPassword, comparePassword } from "../utils/hash";
-import { signJwt } from "../utils/jwt";
+import { signJwt, verifyJwt } from "../utils/jwt";
 
+/** Tipado opcional del payload del JWT */
 type RoleName = "ADMIN" | "USER";
+interface JwtPayload {
+  sub: string;          // user id
+  username: string;
+  role: RoleName;
+  iat?: number;
+  exp?: number;
+}
 
-/**
- * POST /auth/register
- * Crea un usuario con password hasheado y rol (por defecto USER).
- */
+/** Helper: parsea Authorization: Bearer <token> */
+function getTokenFromHeader(req: Request): string | null {
+  const auth = req.headers.authorization || "";
+  const [type, token] = auth.split(" ");
+  if (!type || type.toLowerCase() !== "bearer" || !token) return null;
+  return token;
+}
+
+/* ===========================================================
+ * REGISTER  (POST /auth/register)
+ *   - Usa passwordHash y roleId (ref a Role)
+ * =========================================================== */
 export async function register(req: Request, res: Response) {
   try {
-    // Validación del payload (elimina campos no permitidos)
-    const { value, error } = registerSchema.validate(req.body, {
+    const result = registerSchema.validate(req.body, {
       abortEarly: false,
       stripUnknown: true,
     });
-    if (error) {
+
+    if (result.error) {
       return res.status(400).json({
         message: "Validación fallida",
-        details: error.details.map((d) => d.message),
+        details: result.error.details.map((d) => d.message),
       });
     }
+    if (!result.value) {
+      return res.status(400).json({ message: "Cuerpo vacío o JSON inválido" });
+    }
 
-    const { username, email, password, role } = value as {
+    const { username, email, password, role } = result.value as {
       username: string;
       email: string;
       password: string;
-      role?: RoleName;
+      role?: RoleName; // "ADMIN" | "USER"
     };
 
-    // Duplicados por email o username
-    const exists = await User.findOne({ $or: [{ email }, { username }] });
-    if (exists) {
-      return res.status(400).json({ message: "Email o username ya está en uso" });
+    // Unicidad
+    if (await User.exists({ username })) {
+      return res.status(409).json({ message: "El username ya está en uso" });
+    }
+    if (await User.exists({ email })) {
+      return res.status(409).json({ message: "El email ya está en uso" });
     }
 
-    // Resolver rol (crearlo si no existe en dev)
-    const roleName: RoleName = (role as RoleName) ?? "USER";
-    let roleDoc = await Role.findOne({ name: roleName });
+    // Resolver roleId a partir del nombre de rol (opcional, default USER)
+    const roleName: RoleName = role ?? "USER";
+    const roleDoc = await Role.findOne({ name: roleName });
     if (!roleDoc) {
-      roleDoc = await Role.create({ name: roleName });
+      return res.status(400).json({ message: "Rol inválido" });
     }
 
-    // Hash de contraseña
     const passwordHash = await hashPassword(password);
 
-    // Crear usuario
     const user = await User.create({
       username,
       email,
-      passwordHash,
-      roleId: roleDoc._id,
+      passwordHash,      // <- en tu schema
+      roleId: roleDoc._id, // <- ref Role
       status: "ACTIVE",
     });
 
-    // Respuesta sin passwordHash
     return res.status(201).json({
-      id: user._id,
+      id: String(user._id),
       username: user.username,
       email: user.email,
-      role: roleDoc.name,
+      role: roleName,
       status: user.status,
       createdAt: user.createdAt,
     });
@@ -72,52 +91,53 @@ export async function register(req: Request, res: Response) {
   }
 }
 
-/**
- * POST /auth/login
- * Verifica credenciales y devuelve JWT.
- */
+/* ===========================================================
+ * LOGIN  (POST /auth/login)
+ *   - Compara contra passwordHash
+ *   - Saca el rol desde roleId (populate)
+ * =========================================================== */
 export async function login(req: Request, res: Response) {
   try {
-    const { value, error } = loginSchema.validate(req.body, {
+    const result = loginSchema.validate(req.body, {
       abortEarly: false,
       stripUnknown: true,
     });
-    if (error) {
+
+    if (result.error) {
       return res.status(400).json({
         message: "Validación fallida",
-        details: error.details.map((d) => d.message),
+        details: result.error.details.map((d) => d.message),
       });
     }
-
-    const { email, password } = value as { email: string; password: string };
-
-    // Buscar usuario por email
-    const user = await User.findOne({ email }).populate("roleId");
-    if (!user) {
-      return res.status(401).json({ message: "Credenciales inválidas" });
+    if (!result.value) {
+      return res.status(400).json({ message: "Cuerpo vacío o JSON inválido" });
     }
 
-    // Comparar contraseña
+    const { email, password } = result.value as { email: string; password: string };
+
+    const user = await User.findOne({ email })
+      .populate({ path: "roleId", select: "name" }); // trae el rol
+
+    if (!user) return res.status(401).json({ message: "Credenciales inválidas" });
+
     const ok = await comparePassword(password, user.passwordHash);
-    if (!ok) {
-      return res.status(401).json({ message: "Credenciales inválidas" });
-    }
+    if (!ok) return res.status(401).json({ message: "Credenciales inválidas" });
 
-    // Firmar JWT
-    const payload = {
+    const roleName = (user.roleId && (user.roleId as any).name) as RoleName || "USER";
+
+    const token = signJwt({
       sub: String(user._id),
       username: user.username,
-      role: (user as any).roleId?.name ?? "USER",
-    };
-    const token = signJwt(payload);
+      role: roleName,
+    });
 
     return res.json({
       token,
       user: {
-        id: user._id,
+        id: String(user._id),
         username: user.username,
         email: user.email,
-        role: payload.role,
+        role: roleName,
       },
     });
   } catch (err) {
@@ -126,35 +146,81 @@ export async function login(req: Request, res: Response) {
   }
 }
 
-/**
- * GET /auth/me
- * Devuelve info básica del usuario autenticado (payload del JWT o consulta a DB).
- * Requiere el middleware `auth` que inyecta `req.user`.
- */
+/* ===========================================================
+ * ME  (GET /auth/me)
+ *   - Lee token, busca usuario y popula rol
+ * =========================================================== */
 export async function me(req: Request, res: Response) {
   try {
-    const payload = (req as any).user as
-      | { sub: string; username: string; role: RoleName }
-      | undefined;
+    const token = getTokenFromHeader(req);
+    if (!token) return res.status(401).json({ message: "Token requerido" });
 
-    if (!payload) return res.status(401).json({ message: "No autenticado" });
+    const payload = verifyJwt<JwtPayload>(token);
+    if (!payload) return res.status(401).json({ message: "Token inválido o expirado" });
 
-    // Si prefieres devolver datos desde DB:
-    // const user = await User.findById(payload.sub)
-    //   .select("_id username email")
-    //   .lean();
-    // return res.json({ user });
+    const user = await User.findById(payload.sub, { passwordHash: 0, __v: 0 })
+      .populate({ path: "roleId", select: "name" })
+      .lean();
 
-    // Para respuesta rápida con lo que viene en el token:
+    if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
+
+    const roleName = (user.roleId as any)?.name ?? "USER";
+
     return res.json({
-      user: {
-        id: payload.sub,
-        username: payload.username,
-        role: payload.role,
-      },
+      id: String(user._id),
+      username: user.username,
+      email: user.email,
+      role: roleName,
+      status: user.status,
+      createdAt: user.createdAt,
     });
   } catch (err) {
     console.error("❌ Error en /auth/me:", err);
+    return res.status(500).json({ message: "Error interno" });
+  }
+}
+
+/* ===========================================================
+ * GET USERS  (GET /auth/users)  — Sub-issue #56
+ *   - Paginado y populate(roleId)
+ *   - No devuelve passwordHash
+ * =========================================================== */
+export async function getUsers(req: Request, res: Response) {
+  try {
+    const page = Math.max(parseInt(String(req.query.page ?? "1"), 10), 1);
+    const limit = Math.max(parseInt(String(req.query.limit ?? "20"), 10), 1);
+    const skip = (page - 1) * limit;
+
+    const [total, users] = await Promise.all([
+      User.countDocuments({}),
+      User.find({}, { passwordHash: 0, __v: 0 })
+        .populate({ path: "roleId", select: "name" })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+    ]);
+
+    const data = users.map((u: any) => ({
+      id: String(u._id),
+      username: u.username,
+      email: u.email,
+      role: u.roleId?.name ?? "USER",
+      status: u.status,
+      createdAt: u.createdAt,
+    }));
+
+    return res.json({
+      meta: {
+        total,
+        page,
+        limit,
+        pages: Math.ceil(total / limit) || 1,
+      },
+      data,
+    });
+  } catch (err) {
+    console.error("❌ Error en getUsers:", err);
     return res.status(500).json({ message: "Error interno" });
   }
 }
