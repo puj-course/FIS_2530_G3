@@ -1,15 +1,40 @@
+// src/routes/users.routes.ts
+// src/routes/users.routes.ts
 import { Router } from "express";
-import { auth, requireRole } from "../middlewares/auth.middleware";
-import { listUsers } from "../controllers/users.controller"; // debe exportarse nombrado
+import {
+  createUser,
+  getUsers,
+  getUserById,
+  updateUser,
+  deleteUser,
+  seguirPublicacion,
+  dejarSeguirPublicacion,
+  enviarNotificacion,
+} from "../controllers/users.controller";
 
 const router = Router();
 
-// GET /users  (solo ADMIN)
-router.get("/", auth, requireRole("ADMIN"), (req, res) =>
-  listUsers(req, res).catch((err) => {
-    console.error("❌ Error en GET /users:", err);
-    res.status(500).json({ message: "Error interno" });
-  })
-);
+// CRUD
+router.post("/", createUser);
+router.get("/", getUsers);
+router.get("/:id", getUserById);
+router.put("/:id", updateUser);
+router.delete("/:id", deleteUser);
 
-export default router; // <-- hace que el archivo SEA un módulo
+// Funcionalidades del diagrama
+router.post("/:id/follow/:pubId", seguirPublicacion);
+router.delete("/:id/follow/:pubId", dejarSeguirPublicacion);
+router.post("/:id/notify", enviarNotificacion);
+// CRUD
+router.post("/", createUser);
+router.get("/", getUsers);
+router.get("/:id", getUserById);
+router.put("/:id", updateUser);
+router.delete("/:id", deleteUser);
+
+// Funcionalidades del diagrama
+router.post("/:id/follow/:pubId", seguirPublicacion);
+router.delete("/:id/follow/:pubId", dejarSeguirPublicacion);
+router.post("/:id/notify", enviarNotificacion);
+
+export default router;

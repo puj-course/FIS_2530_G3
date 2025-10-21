@@ -1,123 +1,134 @@
-import { Request, Response } from "express";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import Joi from "joi";
+import { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import Joi from 'joi';
+import bcrypt from 'bcryptjs';
+import Usuario, { IUsuario } from '../models/user.model';
 
-import User from "../models/user.model";
-import Role from "../models/role.model";
-import { registerSchema, loginSchema } from "../validators/auth.schema";
+const JWT_SECRET = process.env.JWT_SECRET || 'CHANGE_ME_SECRET';
 
-const JWT_SECRET = process.env.JWT_SECRET || "secretKey123";
+/* ──────────────────────────────────────────────────────────────
+ * Validaciones (Joi)
+ * ────────────────────────────────────────────────────────────── */
+const registerSchema = Joi.object({
+  nombre: Joi.string().min(2).max(80).required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
+  direccion: Joi.string().allow('', null),
+  // rol es opcional, por defecto 'usuario'
+  rol: Joi.string().valid('usuario', 'admin').optional(),
+});
 
-// 🟩 REGISTER
-export async function register(req: Request, res: Response) {
-  const { value, error } = registerSchema.validate(req.body);
-  if (error) {
-    return res.status(400).json({
-      message: "Validación fallida",
-      details: error.details.map((d: Joi.ValidationErrorItem) => d.message),
-    });
-  }
+const loginSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+});
 
-  const { username, email, password } = value;
-  const roleName = value.role || "USER";
+/* ──────────────────────────────────────────────────────────────
+ * Helpers
+ * ────────────────────────────────────────────────────────────── */
 
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
-    return res.status(400).json({ message: "El correo ya está registrado" });
-  }
-
-  const role = await Role.findOne({ name: roleName });
-  if (!role) return res.status(400).json({ message: "Rol no encontrado" });
-
-  const passwordHash = await bcrypt.hash(password, 10);
-
-  const newUser = new User({
-    username,
-    email,
-    passwordHash,
-    roleId: role._id,
-  });
-
-  await newUser.save();
-
-  return res.status(201).json({ message: "Usuario creado exitosamente" });
-}
-
-// 🟩 LOGIN
-export async function login(req: Request, res: Response) {
-  const { value, error } = loginSchema.validate(req.body);
-  if (error) {
-    return res.status(400).json({
-      message: "Validación fallida",
-      details: error.details.map((d: Joi.ValidationErrorItem) => d.message),
-    });
-  }
-
-  const { email, password } = value;
-
-  const user = await User.findOne({ email }).populate("roleId");
-  if (!user) return res.status(401).json({ message: "Credenciales inválidas" });
-
-  const valid = await bcrypt.compare(password, user.passwordHash);
-  if (!valid) return res.status(401).json({ message: "Credenciales inválidas" });
-
-  const token = jwt.sign(
+function signToken(user: IUsuario) {
+  return jwt.sign(
     {
-      sub: user._id.toString(),
-      username: user.username,
-      role: (user.roleId as any).name, // "ADMIN" | "USER"
+      sub: user.id,        // usar string del id
+      nombre: user.nombre, // mostramos nombre en el token
+      rol: user.rol,       // 'usuario' | 'admin'
     },
     JWT_SECRET,
-    { expiresIn: "1d" }
+    { expiresIn: '1d' }
   );
-
-  return res.json({ token });
 }
 
-// 🟩 ME (perfil)
-export async function me(req: Request, res: Response) {
-  const payload = (req as any).user;
-  if (!payload) return res.status(401).json({ message: "No autenticado" });
-
-  const dbUser = await User.findById(payload.sub).populate("roleId", "name");
-  if (!dbUser) return res.status(404).json({ message: "Usuario no encontrado" });
-
-  return res.json({
-    id: dbUser._id,
-    username: dbUser.username,
-    email: dbUser.email,
-    role: (dbUser.roleId as any).name,
-    createdAt: dbUser.createdAt,
-  });
+function sanitizeUser(user: IUsuario) {
+  // createdAt/updatedAt existen por timestamps, pero no están tipados en la interfaz:
+  const anyUser = user as any;
+  return {
+    id: user.id,
+    nombre: user.nombre,
+    email: user.email,
+    direccion: user.direccion ?? '',
+    rol: user.rol,
+    createdAt: anyUser?.createdAt,
+    updatedAt: anyUser?.updatedAt,
+  };
 }
 
-// 🟩 GET USERS (solo ADMIN)
-export async function getUsers(req: Request, res: Response) {
-  const page = parseInt((req.query.page as string) || "1", 10);
-  const limit = parseInt((req.query.limit as string) || "10", 10);
-  const skip = (page - 1) * limit;
+/* ──────────────────────────────────────────────────────────────
+ * Controladores
+ * ────────────────────────────────────────────────────────────── */
 
-  const total = await User.countDocuments();
-  const users = await User.find()
-    .populate("roleId", "name")
-    .skip(skip)
-    .limit(limit)
-    .select("-passwordHash");
+export const register = async (req: Request, res: Response) => {
+  try {
+    const { value, error } = registerSchema.validate(req.body, { abortEarly: false });
+    if (error) {
+      return res.status(400).json({ error: 'Datos inválidos', details: error.details });
+    }
 
-  return res.json({
-    meta: { total, page, limit, pages: Math.ceil(total / limit) },
-    data: users.map((u) => ({
-      id: u._id,
-      username: u.username,
-      email: u.email,
-      role: (u.roleId as any).name,
-      createdAt: u.createdAt,
-    })),
-  });
-}
+    const { nombre, email, password, direccion, rol } = value;
 
-export async function listUsers(_req: Request, res: Response) {
-  const users = await User.find({}, { passwordHash: 0 }).sort({ createdAt: -1 });
-  res.json(users);
-}
+    // ¿ya existe?
+    const exists = await Usuario.findOne({ email: email.toLowerCase() });
+    if (exists) return res.status(409).json({ error: 'El email ya está registrado' });
+
+    // hash
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt);
+
+    const user = await Usuario.create({
+      nombre,
+      email,
+      password: hash,
+      direccion: direccion ?? '',
+      rol: rol ?? 'usuario',
+    });
+
+    const token = signToken(user);
+
+    return res.status(201).json({
+      user: sanitizeUser(user),
+      token,
+    });
+  } catch (e: any) {
+    return res.status(500).json({ error: e.message || 'Error interno' });
+  }
+};
+
+export const login = async (req: Request, res: Response) => {
+  try {
+    const { value, error } = loginSchema.validate(req.body, { abortEarly: false });
+    if (error) {
+      return res.status(400).json({ error: 'Credenciales inválidas', details: error.details });
+    }
+
+    const { email, password } = value;
+
+    const user = await Usuario.findOne({ email: email.toLowerCase() });
+    if (!user) return res.status(401).json({ error: 'Email o contraseña incorrectos' });
+
+    const ok = await bcrypt.compare(password, user.password);
+    if (!ok) return res.status(401).json({ error: 'Email o contraseña incorrectos' });
+
+    const token = signToken(user);
+
+    return res.json({
+      user: sanitizeUser(user),
+      token,
+    });
+  } catch (e: any) {
+    return res.status(500).json({ error: e.message || 'Error interno' });
+  }
+};
+
+export const me = async (req: Request & { user?: { id: string } }, res: Response) => {
+  try {
+    const id = req.user?.id;
+    if (!id) return res.status(401).json({ error: 'No autorizado' });
+
+    const user = await Usuario.findById(id);
+    if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+
+    return res.json({ user: sanitizeUser(user) });
+  } catch (e: any) {
+    return res.status(500).json({ error: e.message || 'Error interno' });
+  }
+};
