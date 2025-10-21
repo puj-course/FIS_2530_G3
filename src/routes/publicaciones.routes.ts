@@ -40,4 +40,8 @@ router.post("/:id/dejar-seguir", auth, dejarSeguirPublicacion);
 // Cambiar estado (activa|pausada|cerrada)
 router.post("/:id/estado", auth, cambiarEstadoPublicacion);
 
+<<<<<<< HEAD
 export default router;
+=======
+export default router;
+>>>>>>> samuelDaza
