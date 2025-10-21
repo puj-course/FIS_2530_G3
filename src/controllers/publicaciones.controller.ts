@@ -301,4 +301,8 @@ export const cambiarEstadoPublicacion = async (req: Request, res: Response) => {
       .status(500)
       .json({ message: "Error cambiando estado", error: err.message });
   }
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> thomas

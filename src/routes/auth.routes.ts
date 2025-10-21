@@ -20,4 +20,8 @@ router.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   res.status(500).json({ message: "Auth route error", error: err?.message });
 });
 
+<<<<<<< HEAD
 export default router; 
+=======
+export default router;
+>>>>>>> thomas

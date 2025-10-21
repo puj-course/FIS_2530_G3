@@ -13,7 +13,6 @@ export const connectDB = async (): Promise<void> => {
 
     await mongoose.connect(MONGO_URI);
 
-    // 🔹 Sincroniza índices de todos los modelos declarados (opcional pero recomendado)
     await mongoose.connection.syncIndexes();
 
     console.log("✅ MongoDB conectado:", MONGO_URI.split("@")[1]);

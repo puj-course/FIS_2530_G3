@@ -110,4 +110,8 @@ export const PublicacionVenta: PublicacionVentaModel =
   (Publicacion.discriminators?.PublicacionVenta as PublicacionVentaModel) ||
   Publicacion.discriminator<IPublicacionVenta>("PublicacionVenta", PublicacionVentaSchema);
 
+<<<<<<< HEAD
 export default Publicacion;
+=======
+export default Publicacion;
+>>>>>>> thomas

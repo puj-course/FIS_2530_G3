@@ -29,7 +29,7 @@ const ReciboDonacionSchema = new Schema<IReciboDonacionBase, ReciboDonacionModel
 
 // Stub de PDF
 ReciboDonacionSchema.methods.generarPDF = async function (): Promise<Buffer> {
-  const contenido = RECIBO ${this.numero} - ${this.fecha.toISOString()};
+  const contenido = `RECIBO ${this.numero} - ${this.fecha.toISOString()}`;
   return Buffer.from(contenido, 'utf8');
 };
 

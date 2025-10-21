@@ -25,4 +25,8 @@ router.post("/:id/follow/:pubId", seguirPublicacion);
 router.delete("/:id/follow/:pubId", dejarSeguirPublicacion);
 router.post("/:id/notify", enviarNotificacion);
 
+<<<<<<< HEAD
 export default router;
+=======
+export default router;
+>>>>>>> thomas
