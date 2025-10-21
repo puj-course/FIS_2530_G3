@@ -1,44 +1,37 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyJwt } from "../utils/jwt";
+import jwt from "jsonwebtoken";
 
-export interface AuthPayload {
-  sub: string;           
-  username: string;
-  role: "ADMIN" | "USER";
+export interface ReqAuth extends Request {
+  userId?: string;
 }
 
-// Middleware: valida token y guarda payload en req.user
-export function auth(req: Request, res: Response, next: NextFunction) {
+export const auth = (req: ReqAuth, res: Response, next: NextFunction) => {
   try {
-    const header = req.headers.authorization || "";
-    const [scheme, token] = header.split(" ");
+    const header = req.headers.authorization;
+    if (!header) return res.status(401).json({ message: "No se proporcionó token de autenticación" });
 
-    if (scheme !== "Bearer" || !token) {
-      return res.status(401).json({ message: "Token requerido" });
+    const token = header.replace("Bearer ", "").trim();
+    if (!token) return res.status(401).json({ message: "Token inválido o vacío" });
+
+    const secret = process.env.JWT_SECRET;
+    if (!secret) return res.status(500).json({ message: "Error interno de configuración" });
+
+    const decoded = jwt.verify(token, secret) as jwt.JwtPayload | { id?: string; sub?: string };
+
+    if (!decoded || typeof decoded !== "object") {
+      return res.status(401).json({ message: "Token inválido" });
     }
 
-    const payload = verifyJwt<AuthPayload>(token);
-    if (!payload) {
-      return res.status(401).json({ message: "Token inválido o expirado" });
-    }
+    // ✅ Acepta tokens con 'id' o con 'sub'
+    const uid = (decoded as any).id ?? (decoded as any).sub;
+    if (!uid) return res.status(401).json({ message: "Token inválido" });
 
-    (req as any).user = payload; // guarda el payload en la request
-    return next();
-  } catch (err) {
-    return res.status(401).json({ message: "Token inválido" });
+    req.userId = String(uid);
+    next();
+  } catch (err: any) {
+    return res.status(401).json({ message: "Token inválido o expirado" });
   }
-}
+};
 
-// Middleware: valida rol específico (ej: ADMIN)
-export function requireRole(...roles: AuthPayload["role"][]) {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const user = (req as any).user as AuthPayload;
-    if (!user) {
-      return res.status(401).json({ message: "No autenticado" });
-    }
-    if (!roles.includes(user.role)) {
-      return res.status(403).json({ message: "No autorizado" });
-    }
-    return next();
-  };
-}
+// Alias opcional si en algún archivo importas requireAuth
+export const requireAuth = auth;
