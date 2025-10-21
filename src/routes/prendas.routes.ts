@@ -5,7 +5,7 @@ import {
   obtenerPrenda,
   actualizarPrenda,
   eliminarPrenda,
-
+  validarPrenda,          // 👈 nuevo
 } from "../controllers/prendas.controller";
 
 const router = Router();

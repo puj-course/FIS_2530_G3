@@ -1,37 +1,23 @@
-// src/routes/auth.routes.ts
-import { Router } from "express";
-import { register, login, me, listUsers } from "../controllers/auth.controller";
-import { auth, requireRole } from "../middlewares/auth.middleware";
+import { Router, Request, Response, NextFunction } from "express";
+import { register, login, me } from "../controllers/auth.controller";
+import { auth as requireAuth } from "../middlewares/auth.middleware";
 
 const router = Router();
 
-router.post("/register", (req, res) =>
-  register(req, res).catch((err) => {
-    console.error("❌ Error en /auth/register:", err);
-    res.status(500).json({ message: "Error interno" });
-  })
-);
+// Auth
+router.post("/register", register);
+router.post("/login", login);
+router.get("/me", requireAuth, me);
 
-router.post("/login", (req, res) =>
-  login(req, res).catch((err) => {
-    console.error("❌ Error en /auth/login:", err);
-    res.status(500).json({ message: "Error interno" });
-  })
-);
+// Healthcheck opcional
+router.get("/health", (_req: Request, res: Response) => {
+  res.json({ ok: true, service: "auth" });
+});
 
-router.get("/me", auth, (req, res) =>
-  me(req, res).catch((err) => {
-    console.error("❌ Error en /auth/me:", err);
-    res.status(500).json({ message: "Error interno" });
-  })
-);
-
-// Solo ADMIN: listar usuarios
-router.get("/admin/users", auth, requireRole("ADMIN"), (req, res) =>
-  listUsers(req, res).catch((err) => {
-    console.error("❌ Error en /auth/admin/users:", err);
-    res.status(500).json({ message: "Error interno" });
-  })
-);
+// Error handler tipado (arregla TS7006)
+router.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+  console.error("Auth route error:", err);
+  res.status(500).json({ message: "Auth route error", error: err?.message });
+});
 
 export default router;
