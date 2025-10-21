@@ -1,0 +1,35 @@
+name: CI-CD with AI Support
+
+on:
+  push:
+    branches:
+      - grupo3  # o la rama de tu equipo
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Compilar el proyecto
+        run: mvn clean compile
+
+      - name: Ejecutar pruebas automáticas
+        run: mvn test
+
+  docker_build:
+    runs-on: ubuntu-latest
+    needs: build-test
+    steps:
+      - name: Construir imagen Docker (IA sugerida)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
