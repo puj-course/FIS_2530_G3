@@ -1,4 +1,5 @@
 // src/routes/users.routes.ts
+// src/routes/users.routes.ts
 import { Router } from "express";
 import {
   createUser,
@@ -24,9 +25,16 @@ router.delete("/:id", deleteUser);
 router.post("/:id/follow/:pubId", seguirPublicacion);
 router.delete("/:id/follow/:pubId", dejarSeguirPublicacion);
 router.post("/:id/notify", enviarNotificacion);
+// CRUD
+router.post("/", createUser);
+router.get("/", getUsers);
+router.get("/:id", getUserById);
+router.put("/:id", updateUser);
+router.delete("/:id", deleteUser);
 
-<<<<<<< HEAD
+// Funcionalidades del diagrama
+router.post("/:id/follow/:pubId", seguirPublicacion);
+router.delete("/:id/follow/:pubId", dejarSeguirPublicacion);
+router.post("/:id/notify", enviarNotificacion);
+
 export default router;
-=======
-export default router;
->>>>>>> thomas
