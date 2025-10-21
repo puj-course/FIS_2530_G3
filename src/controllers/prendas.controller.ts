@@ -1,7 +1,7 @@
 // src/controllers/prendas.controller.ts
 import { Request, Response } from "express";
 import { Types } from "mongoose";
-import { Prenda } from "../models/prenda.models"; // ⬅ ajusta la ruta/nombre si es necesario
+import { Prenda } from "../models/prenda.model"; // ⬅ ajusta la ruta/nombre si es necesario
 
 const isObjectId = (id?: string) => !!id && Types.ObjectId.isValid(id);
 
