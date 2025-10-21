@@ -18,6 +18,7 @@ const InventorySchema = new Schema<InventoryDoc>(
     quantity: { type: Number, required: true, min: 0 },
     price: { type: Number, required: true, min: 0 },
     supplier: { type: String, trim: true },
+    // 🔗 Relación con usuario administrador
     adminId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   },
   {
@@ -26,6 +27,7 @@ const InventorySchema = new Schema<InventoryDoc>(
   }
 );
 
+// Índice compuesto para mejorar consultas por admin y producto
 InventorySchema.index({ adminId: 1, productName: 1 });
 
 export const InventoryModel = model<InventoryDoc>("Inventory", InventorySchema);
