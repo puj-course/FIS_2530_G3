@@ -83,7 +83,7 @@ async function main() {
 
   console.log("✅ SMOKE OK");
 }
-
+//ccccccccccccccccccccccccccccc estoy en smoke.ts
 main().catch((e) => {
   console.error("❌ SMOKE FAIL:", e.message);
   process.exit(1);
