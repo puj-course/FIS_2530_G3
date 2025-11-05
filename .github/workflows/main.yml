@@ -21,10 +21,12 @@ jobs:
         run: |
           echo "has_backend=$([ -f package.json ] && echo true || echo false)" >> $GITHUB_OUTPUT
           echo "has_frontend=$([ -f frontend/package.json ] && echo true || echo false)" >> $GITHUB_OUTPUT
+
       - name: Show detection
         run: |
           echo "has_backend=${{ steps.detect.outputs.has_backend }}"
           echo "has_frontend=${{ steps.detect.outputs.has_frontend }}"
+
       # --- Backend (raíz) ---
       - name: Use Node 20
         if: ${{ steps.detect.outputs.has_backend == 'true' }}
@@ -87,4 +89,4 @@ jobs:
         with:
           name: web-dist
           path: frontend/dist/**
-          if-no-files-found: warn
+          if-no-files-found: warn
