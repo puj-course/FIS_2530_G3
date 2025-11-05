@@ -1,5 +1,4 @@
 // src/pages/Home.tsx
-import React from "react";
 import "../styles.css"; // usa el mismo css del login
 
 export default function Home() {
