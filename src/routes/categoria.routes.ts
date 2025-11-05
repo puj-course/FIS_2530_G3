@@ -19,6 +19,4 @@ router.delete("/:id", eliminarCategoria);
 // método del diagrama
 router.patch("/:id/renombrar", renombrarCategoria);
 
-//ccccccccccccccccccccccccccccc estoy en categoria.routes.ts
-
 export default router;

@@ -1,0 +1,212 @@
+/* Paleta de colores y estilo base para Eco Moda */
+
+:root {
+  --color-primary: #05df72;
+  --color-primary-dark: #00a63d;
+  --color-link: #50a2ff;
+  --color-bg-light: #dbfbe6;
+  --color-bg-card: #ffffff;
+  --color-text: #212529;
+}
+
+/* Estilo global del cuerpo */
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom, var(--color-bg-light), var(--color-bg-card));
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Contenedores principales para login y registro */
+.login-container {
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-bg-card);
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+}
+
+.register-container {
+  width: 100%;
+  max-width: 480px;
+  background: var(--color-bg-card);
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+}
+
+/* Títulos y subtítulos */
+.login-container h1,
+.register-container h1 {
+  font-size: 2rem;
+  margin: 0 0 0.5rem;
+  color: var(--color-primary-dark);
+}
+
+.login-container p,
+.register-container p {
+  margin: 0 0 1rem;
+  color: var(--color-text);
+}
+
+/* Estructura de formularios */
+form div {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  color: var(--color-text);
+  background-color: #fff;
+}
+
+input[type="checkbox"] {
+  margin-right: 0.5rem;
+  accent-color: var(--color-primary);
+}
+
+button[type="submit"] {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button[type="submit"]:hover {
+  background: var(--color-primary-dark);
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Texto de pie y enlaces */
+.footer-text {
+  margin-top: 1rem;
+  text-align: center;
+  color: var(--color-text);
+  font-size: 0.875rem;
+}
+
+/* Contenedor interior para centrar campos dentro de la tarjeta */
+.form-inner {
+  width: 100%;
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* Este es un comentario en CSS */
+/* --- Layout general de la página de login --- */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Tarjeta */
+.login-card {
+  background: var(--color-bg-card);
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 420px;
+  padding: 2.5rem 2.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Título y subtítulo centrados */
+/* --- Título principal del login --- */
+.login-title {
+  color: #056b38; /* verde más profundo y sofisticado */
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.25rem;
+}
+
+/* Subtítulo debajo del título */
+.login-subtitle {
+  color: #2e3a34; /* gris verdoso oscuro, combina perfectamente con el verde */
+  text-align: center;
+  margin: 0;
+}
+
+
+/* Formulario en columna */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Cada campo */
+.login-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* Asegurar ancho completo */
+.login-form input[type="text"],
+.login-form input[type="password"],
+.login-form input[type="email"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Botón ya lo tienes en tu CSS, pero lo centramos */
+.login-form button[type="submit"] {
+  width: 100%;
+}
+
+/* Error */
+.error-text {
+  color: crimson;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* Footer abajo y centrado */
+.login-card .footer-text {
+  text-align: center;
+  margin-top: 0.5rem;
+}
+/* Fuerzo el color del título del login */
+.login-title {
+  color: #056b38 !important;  /* 👈 este !important gana a las demás */
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.25rem;
+}
+  
