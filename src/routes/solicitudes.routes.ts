@@ -7,3 +7,7 @@ router.post('/intercambio', crearSolicitudIntercambio);
 router.patch('/intercambio/:solicitudId/decidir', decidirSolicitudIntercambio);
 
 export default router;
+<<<<<<< HEAD
+=======
+
+>>>>>>> samuelDaza

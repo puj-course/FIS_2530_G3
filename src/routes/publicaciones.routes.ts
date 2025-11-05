@@ -42,6 +42,7 @@ router.post("/:id/estado", auth, cambiarEstadoPublicacion);
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 export default router;
 =======
 export default router;
@@ -49,3 +50,7 @@ export default router;
 =======
 export default router;
 >>>>>>> 1d0cf8577854c100faed4b397030d26f37c95c38
+=======
+export default router;
+//ss
+>>>>>>> samuelDaza
