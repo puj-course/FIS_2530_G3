@@ -1,0 +1,7 @@
+organization=thomaslopezro
+projectKey=thomaslopezro_ecomoda
+serverUrl=https://sonarcloud.io
+serverVersion=8.0.0.69431
+dashboardUrl=https://sonarcloud.io/dashboard?id=thomaslopezro_ecomoda
+ceTaskId=AZpMcpoWy77soIH-2yov
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AZpMcpoWy77soIH-2yov
