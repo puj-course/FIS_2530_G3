@@ -68,6 +68,11 @@ SolicitudIntercambioSchema.methods.rechazar = function (): void {
 /* =========================
  * Modelo con cache
  * ========================= */
+<<<<<<< HEAD
+=======
+
+//dale capooooo
+>>>>>>> 1d0cf8577854c100faed4b397030d26f37c95c38
 export const SolicitudIntercambio: SolicitudIntercambioModel =
   (models.SolicitudIntercambio as SolicitudIntercambioModel) ||
   model<ISolicitudIntercambioBase, SolicitudIntercambioModel>(

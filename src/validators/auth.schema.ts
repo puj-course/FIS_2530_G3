@@ -7,7 +7,10 @@ export const registerSchema = Joi.object({
   role: Joi.string().valid("ADMIN", "USER").optional()
 });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1d0cf8577854c100faed4b397030d26f37c95c38
 export const loginSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(8).required()

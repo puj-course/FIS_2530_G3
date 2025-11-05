@@ -5,7 +5,11 @@ import {
   obtenerPrenda,
   actualizarPrenda,
   eliminarPrenda,
+<<<<<<< HEAD
 
+=======
+  validarPrenda,          // 👈 nuevo
+>>>>>>> 1d0cf8577854c100faed4b397030d26f37c95c38
 } from "../controllers/prendas.controller";
 
 const router = Router();

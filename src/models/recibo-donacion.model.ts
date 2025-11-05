@@ -29,7 +29,11 @@ const ReciboDonacionSchema = new Schema<IReciboDonacionBase, ReciboDonacionModel
 
 // Stub de PDF
 ReciboDonacionSchema.methods.generarPDF = async function (): Promise<Buffer> {
+<<<<<<< HEAD
   const contenido = RECIBO ${this.numero} - ${this.fecha.toISOString()};
+=======
+  const contenido = `RECIBO ${this.numero} - ${this.fecha.toISOString()}`;
+>>>>>>> 1d0cf8577854c100faed4b397030d26f37c95c38
   return Buffer.from(contenido, 'utf8');
 };
 
@@ -38,4 +42,8 @@ export const ReciboDonacion: ReciboDonacionModel =
   (models.ReciboDonacion as ReciboDonacionModel) ||
   model<IReciboDonacionBase, ReciboDonacionModel>('ReciboDonacion', ReciboDonacionSchema);
 
+<<<<<<< HEAD
 export default ReciboDonacion;
+=======
+export default ReciboDonacion;
+>>>>>>> 1d0cf8577854c100faed4b397030d26f37c95c38

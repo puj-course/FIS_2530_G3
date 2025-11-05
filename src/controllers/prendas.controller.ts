@@ -1,7 +1,11 @@
 // src/controllers/prendas.controller.ts
 import { Request, Response } from "express";
 import { Types } from "mongoose";
+<<<<<<< HEAD
 import { Prenda } from "../models/prenda.model"; // ⬅ ajusta la ruta/nombre si es necesario
+=======
+import { Prenda } from "../models/prenda.models"; // ⬅ ajusta la ruta/nombre si es necesario
+>>>>>>> 1d0cf8577854c100faed4b397030d26f37c95c38
 
 const isObjectId = (id?: string) => !!id && Types.ObjectId.isValid(id);
 
@@ -145,3 +149,25 @@ export const eliminarPrenda = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Error eliminando prenda", error: err.message });
   }
 };
+<<<<<<< HEAD
+=======
+// ✅ Valida usando el método de instancia .esValida() del modelo
+export const validarPrenda = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params as { id: string };
+    if (!isObjectId(id)) return res.status(400).json({ message: "ID inválido" });
+
+    const prenda = await Prenda.findById(id);
+    if (!prenda) return res.status(404).json({ message: "Prenda no encontrada" });
+
+    // si agregaste el método de instancia en el modelo (como te pasé)
+    // PrendaSchema.methods.esValida = function(): boolean { ... }
+    // @ts-ignore porque TS no “ve” métodos custom si no extendiste el tipo
+    const ok = prenda.esValida ? prenda.esValida() : true;
+
+    return res.status(200).json({ ok });
+  } catch (err: any) {
+    return res.status(500).json({ message: "Error validando prenda", error: err.message });
+  }
+};
+>>>>>>> 1d0cf8577854c100faed4b397030d26f37c95c38
