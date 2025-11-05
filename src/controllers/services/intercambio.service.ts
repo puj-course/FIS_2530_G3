@@ -19,6 +19,8 @@ export class IntercambioService {
     });
 
     // 3) Notifica al dueño (placeholder del diagrama)
+
+    //que lo queeeeeeeee
     try {
       const duenio = await Usuario.findById(pub.duenio);
       if (duenio?.recibirNotificacion) {
