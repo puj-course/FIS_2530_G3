@@ -1,5 +1,6 @@
 // src/pages/Home.tsx
 import React from "react";
+import { Link } from "react-router-dom"; // 👈 import necesario
 import "../styles.css";
 
 export default function Home() {
@@ -29,7 +30,7 @@ export default function Home() {
             gap: "1.5rem",
             alignItems: "flex-start",
             flexWrap: "wrap",
-            color: "#222", // texto oscuro general
+            color: "#222",
           }}
         >
           {/* columna izquierda */}
@@ -210,19 +211,33 @@ export default function Home() {
         </div>
 
         {/* footer */}
-        <p
+        <div
           className="footer-text"
           style={{
             marginTop: "2rem",
             color: "#333",
             textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "0.4rem",
           }}
         >
-          ¿Necesitas volver al login?{" "}
-          <a href="/login" style={{ color: "#0e693b", fontWeight: 600 }}>
-            Inicia sesión
-          </a>
-        </p>
+          <p style={{ margin: 0 }}>
+            ¿Necesitas hacer login?{" "}
+            <a href="/login" style={{ color: "#0e693b", fontWeight: 600 }}>
+              Inicia sesión
+            </a>
+          </p>
+
+          {/* 👇 NUEVO LINK */}
+          <p style={{ margin: 0 }}>
+            ¿No tienes cuenta?{" "}
+            <Link to="/register" style={{ color: "#0e693b", fontWeight: 600 }}>
+              Regístrate aquí
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
