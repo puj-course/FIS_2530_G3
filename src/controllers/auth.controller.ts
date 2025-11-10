@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 import Joi from 'joi';
 import bcrypt from 'bcryptjs';
 import Usuario, { IUsuario } from '../models/user.model';
+import { NotificationFacade } from './services/notifications/NotificationFacade';
+
 
 const JWT_SECRET = process.env.JWT_SECRET || 'CHANGE_ME_SECRET';
 
@@ -16,6 +18,8 @@ const registerSchema = Joi.object({
   direccion: Joi.string().allow('', null),
   // rol es opcional, por defecto 'usuario'
   rol: Joi.string().valid('usuario', 'admin').optional(),
+  // NUEVO: teléfono opcional en formato E.164 (ej: +573001112233)
+  telefono: Joi.string().pattern(/^\+?[1-9]\d{1,14}$/).optional(),
 });
 
 const loginSchema = Joi.object({
@@ -48,6 +52,8 @@ function sanitizeUser(user: IUsuario) {
     email: user.email,
     direccion: user.direccion ?? '',
     rol: user.rol,
+    // NUEVO: exponer teléfono si existe
+    telefono: (user as any)?.telefono ?? undefined,
     createdAt: anyUser?.createdAt,
     updatedAt: anyUser?.updatedAt,
   };
@@ -64,12 +70,13 @@ export const register = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Datos inválidos', details: error.details });
     }
 
-    const { nombre, email, password, direccion, rol } = value;
+    const { nombre, email, password, direccion, rol, telefono } = value;
 
     // ¿ya existe?
     const exists = await Usuario.findOne({ email: email.toLowerCase() });
-    if (exists) return res.status(409).json({ error: 'El email ya está registrado' });
-
+    if (exists) {
+      return res.status(409).json({ ok: false, message: 'El email ya está registrado' });
+    }
     // hash
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
@@ -80,11 +87,27 @@ export const register = async (req: Request, res: Response) => {
       password: hash,
       direccion: direccion ?? '',
       rol: rol ?? 'usuario',
+      // NUEVO: guardar teléfono si tu schema lo soporta
+      ...(telefono ? { telefono } : {}),
     });
 
     const token = signToken(user);
 
+    // ──────────────────────────────────────────────────────────
+    // NUEVO: Disparar SMS de "usuario creado" (no bloqueante)
+    // ──────────────────────────────────────────────────────────
+    NotificationFacade.getInstancia()
+      .userCreated({
+        id: user.id,
+        nombre: user.nombre,
+        email: user.email,
+        telefono: (user as any)?.telefono,
+      })
+      .catch((err) => console.error('[register] SMS failed:', err?.message));
+    // ──────────────────────────────────────────────────────────
+
     return res.status(201).json({
+      ok: true,
       user: sanitizeUser(user),
       token,
     });

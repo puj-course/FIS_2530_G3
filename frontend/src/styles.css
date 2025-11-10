@@ -209,4 +209,121 @@ a:hover {
   text-align: center;
   margin-bottom: 0.25rem;
 }
+
+/* ====== REGISTER LAYOUT (centrado y limpio) ====== */
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container-register {
+  min-height: 100vh;
+  padding: 2rem;
+  background: var(--bg-color, #f5f7fa);
+  text-align: center; /* centra también textos por defecto */
+}
+
+.card-register {
+  width: 100%;
+  max-width: 480px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 2rem 2.2rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,.10);
+  flex-direction: column;
+}
+
+.title-register {
+  font-size: 1.9rem;
+  margin-bottom: 1rem;
+  color: var(--primary-color, #222);
+}
+
+.form-register {
+  width: 100%;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.field {
+  width: 100%;
+  text-align: left;           /* etiqueta a la izquierda */
+}
+
+.label {
+  display: block;
+  font-size: 0.92rem;
+  color: #333;
+  margin-bottom: 0.35rem;
+}
+
+/* Unifica TODOS los inputs como “claritos” */
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid #dcdfe4;
+  background: #fff;
+  color: #222;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+
+.input:focus {
+  border-color: var(--primary-color, #4a90e2);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, .15);
+}
+
+/* Por si tu proyecto tenía una .input oscura, la “forzamos” a clara */
+.input.input--light {
+  background: #fff !important;
+  color: #222 !important;
+}
+
+/* Botón ancho y centrado */
+.btn-primary.full {
+  width: 100%;
+  margin-top: 0.6rem;
+  padding: 0.85rem;
+  background: var(--primary-color, #4caf50);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: filter .2s, transform .02s;
+}
+
+.btn-primary.full:hover { filter: brightness(0.95); }
+.btn-primary.full:active { transform: translateY(1px); }
+.btn-primary.full:disabled { opacity: .6; cursor: not-allowed; }
+
+/* Mensaje de error */
+.error-msg {
+  background: #fdecea;
+  border: 1px solid #f5c6cb;
+  color: #b71c1c;
+  padding: 0.6rem .8rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Link centrado y visible */
+.link-row {
+  margin-top: 1rem;
+}
+
+.text-center { text-align: center; }
+
+.link {
+  color: var(--primary-color, #4a90e2);
+  text-decoration: none;
+  font-weight: 700;
+}
+.link:hover { text-decoration: underline; }
+
   
