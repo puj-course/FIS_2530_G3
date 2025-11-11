@@ -1,0 +1,63 @@
+name: CI - Unit Tests & Coverage
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Instalar dependencias
+        run: npm ci
+
+      - name: 🧪 Ejecutar pruebas unitarias (con cobertura)
+        run: npm run test:ci
+
+      - name: 📊 Mostrar resumen de pruebas
+        run: |
+          if ! command -v jq >/dev/null 2>&1; then
+            echo "Instalando jq..."
+            sudo apt-get update -y && sudo apt-get install -y jq
+          fi
+          PASSED=$(jq '.numPassedTests' jest-results.json)
+          TOTAL=$(jq '.numTotalTests' jest-results.json)
+          FAILED=$(jq '.numFailedTests' jest-results.json)
+          echo "✅ Tests pasados: ${PASSED}/${TOTAL} | ❌ Fallados: ${FAILED}"
+
+      - name: 📁 Subir reporte de cobertura (HTML + lcov)
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            coverage/lcov.info
+            coverage/lcov-report/
+          if-no-files-found: warn
+
+      - name: 📁 Subir resultados Jest (JSON)
+        uses: actions/upload-artifact@v4
+        with:
+          name: jest-results
+          path: jest-results.json
+          if-no-files-found: warn
+
+      # ————————————————————————————————
+      # 🔎 OPCIONAL: Integración con SonarQube / SonarCloud
+      # (Solo si tienes configurado sonar-project.properties y secrets)
+      #
+      # - name: 🔍 SonarQube Analysis
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #   run: |
+      #     npm install -g sonar-scanner
