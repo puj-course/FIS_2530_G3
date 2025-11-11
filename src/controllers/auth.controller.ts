@@ -4,6 +4,7 @@ import Joi from 'joi';
 import bcrypt from 'bcryptjs';
 import Usuario, { IUsuario } from '../models/user.model';
 import { NotificationFacade } from './services/notifications/NotificationFacade';
+import { signToken, sanitizeUser } from './helpers/auth.helpers';
 
 
 const JWT_SECRET = process.env.JWT_SECRET || 'CHANGE_ME_SECRET';
@@ -31,33 +32,6 @@ const loginSchema = Joi.object({
  * Helpers
  * ────────────────────────────────────────────────────────────── */
 
-function signToken(user: IUsuario) {
-  return jwt.sign(
-    {
-      sub: user.id,        // usar string del id
-      nombre: user.nombre, // mostramos nombre en el token
-      rol: user.rol,       // 'usuario' | 'admin'
-    },
-    JWT_SECRET,
-    { expiresIn: '1d' }
-  );
-}
-
-function sanitizeUser(user: IUsuario) {
-  // createdAt/updatedAt existen por timestamps, pero no están tipados en la interfaz:
-  const anyUser = user as any;
-  return {
-    id: user.id,
-    nombre: user.nombre,
-    email: user.email,
-    direccion: user.direccion ?? '',
-    rol: user.rol,
-    // NUEVO: exponer teléfono si existe
-    telefono: (user as any)?.telefono ?? undefined,
-    createdAt: anyUser?.createdAt,
-    updatedAt: anyUser?.updatedAt,
-  };
-}
 
 /* ──────────────────────────────────────────────────────────────
  * Controladores
