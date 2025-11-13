@@ -35,11 +35,19 @@ const config: Config = {
 
   // Archivos que cuentan para cobertura (backend + frontend)
   collectCoverageFrom: [
-    'src/**/*.{ts,tsx,js,jsx}',
-  '!**/index.{ts,tsx,js,jsx}',
-  '!**/*.d.ts',
-  '!**/types.{ts,tsx,js,jsx}',
+  'src/**/*.{ts,tsx,js,jsx}',
+  '!src/**/index.{ts,tsx,js,jsx}',
+  '!src/**/*.d.ts',
+  '!src/**/types.{ts,tsx,js,jsx}',
+  '!src/**/*.test.{ts,tsx,js,jsx}',
   ],
+
+  coveragePathIgnorePatterns: [
+  '/node_modules/',
+  '/dist/',
+  'src/server.ts',   
+  'src/config/db.ts' 
+],
 
   // Dónde y en qué formatos se genera la cobertura
   coverageDirectory: 'coverage',

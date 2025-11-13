@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -107,8 +107,8 @@
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -118,40 +118,40 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// src/routes/publicaciones.routes.ts
-<span class="cstat-no" title="statement not covered" >import { Router } from "express";</span>
-<span class="cstat-no" title="statement not covered" >import {</span>
+import { Router } from "express";
+import {
   listarPublicaciones,
   obtenerPublicacion,
   crearPublicacion,
@@ -161,37 +161,37 @@
   dejarSeguirPublicacion,
   cambiarEstadoPublicacion,
 } from "../controllers/publicaciones.controller";
-<span class="cstat-no" title="statement not covered" >import { auth } from "../middlewares/auth.middleware";</span>
+import { auth } from "../middlewares/auth.middleware";
 &nbsp;
-const router = <span class="cstat-no" title="statement not covered" >Router();</span>
+const router = Router();
 &nbsp;
 /**
  * Base: /api/publicaciones
  */
 &nbsp;
 // Listado + filtros ?tipo=&amp;estado=&amp;duenio=&amp;page=&amp;limit=
-<span class="cstat-no" title="statement not covered" >router.get("/", listarPublicaciones);</span>
+router.get("/", listarPublicaciones);
 &nbsp;
 // Obtener por id
-<span class="cstat-no" title="statement not covered" >router.get("/:id", obtenerPublicacion);</span>
+router.get("/:id", obtenerPublicacion);
 &nbsp;
 // Crear (donación/intercambio/venta) -&gt; en el body manda { tipo: 'donacion'|'intercambio'|'venta', ... }
-<span class="cstat-no" title="statement not covered" >router.post("/", auth, crearPublicacion);</span>
+router.post("/", auth, crearPublicacion);
 &nbsp;
 // Actualizar (precio, fotos, estado, stock si 'venta')
-<span class="cstat-no" title="statement not covered" >router.put("/:id", auth, actualizarPublicacion);</span>
+router.put("/:id", auth, actualizarPublicacion);
 &nbsp;
 // Eliminar
-<span class="cstat-no" title="statement not covered" >router.delete("/:id", auth, eliminarPublicacion);</span>
+router.delete("/:id", auth, eliminarPublicacion);
 &nbsp;
 // Seguir / Dejar de seguir
-<span class="cstat-no" title="statement not covered" >router.post("/:id/seguir", auth, seguirPublicacion);</span>
-<span class="cstat-no" title="statement not covered" >router.post("/:id/dejar-seguir", auth, dejarSeguirPublicacion);</span>
+router.post("/:id/seguir", auth, seguirPublicacion);
+router.post("/:id/dejar-seguir", auth, dejarSeguirPublicacion);
 &nbsp;
 // Cambiar estado (activa|pausada|cerrada)
-<span class="cstat-no" title="statement not covered" >router.post("/:id/estado", auth, cambiarEstadoPublicacion);</span>
+router.post("/:id/estado", auth, cambiarEstadoPublicacion);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export default router;</span>
+export default router;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -199,7 +199,7 @@ const router = <span class="cstat-no" title="statement not covered" >Router();</
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-13T03:00:36.271Z
+                at 2025-11-13T14:10:55.705Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

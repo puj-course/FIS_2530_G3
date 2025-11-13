@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>15/18</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>15/18</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -96,72 +96,72 @@
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { Router, Request, Response, NextFunction } from "express";</span>
-<span class="cstat-no" title="statement not covered" >import { register, login, me } from "../controllers/auth.controller";</span>
-<span class="cstat-no" title="statement not covered" >import { auth as requireAuth } from "../middlewares/auth.middleware";</span>
-<span class="cstat-no" title="statement not covered" >import { testSms } from "../controllers/test.controller"; </span>// 👈 nuevo import
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Router, Request, Response, NextFunction } from "express";
+import { register, login, me } from "../controllers/auth.controller";
+import { auth as requireAuth } from "../middlewares/auth.middleware";
+import { testSms } from "../controllers/test.controller"; // 👈 nuevo import
 &nbsp;
-const router = <span class="cstat-no" title="statement not covered" >Router();</span>
+const router = Router();
 &nbsp;
 // Auth
-<span class="cstat-no" title="statement not covered" >router.post("/register", register);</span>
-<span class="cstat-no" title="statement not covered" >router.post("/login", login);</span>
-<span class="cstat-no" title="statement not covered" >router.get("/me", requireAuth, me);</span>
+router.post("/register", register);
+router.post("/login", login);
+router.get("/me", requireAuth, me);
 &nbsp;
 // Healthcheck opcional
-<span class="cstat-no" title="statement not covered" >router.get("/health", <span class="fstat-no" title="function not covered" >(_</span>req: Request, res: Response) =&gt; {</span>
+router.get("/health", <span class="fstat-no" title="function not covered" >(_</span>req: Request, res: Response) =&gt; {
 <span class="cstat-no" title="statement not covered" >  res.json({ ok: true, service: "auth" });</span>
 });
 &nbsp;
 // Error handler tipado (arregla TS7006)
-<span class="cstat-no" title="statement not covered" >router.use(<span class="fstat-no" title="function not covered" >(e</span>rr: any, _req: Request, res: Response, _next: NextFunction) =&gt; {</span>
+router.use(<span class="fstat-no" title="function not covered" >(e</span>rr: any, _req: Request, res: Response, _next: NextFunction) =&gt; {
 <span class="cstat-no" title="statement not covered" >  console.error("Auth route error:", err);</span>
 <span class="cstat-no" title="statement not covered" >  res.status(500).json({ message: "Auth route error", error: err?.message });</span>
 });
 &nbsp;
 //temporal
 &nbsp;
-<span class="cstat-no" title="statement not covered" >router.post("/register", register);</span>
-<span class="cstat-no" title="statement not covered" >router.post("/login", login);</span>
-<span class="cstat-no" title="statement not covered" >router.get("/me", me);</span>
+router.post("/register", register);
+router.post("/login", login);
+router.get("/me", me);
 &nbsp;
 // 👇 NUEVA RUTA DE PRUEBA
-<span class="cstat-no" title="statement not covered" >router.post("/test-sms", testSms);</span>
+router.post("/test-sms", testSms);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export default router;</span>
+export default router;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -169,7 +169,7 @@ const router = <span class="cstat-no" title="statement not covered" >Router();</
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-13T03:00:36.271Z
+                at 2025-11-13T14:10:55.705Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
