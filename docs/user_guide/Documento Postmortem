@@ -1,0 +1,151 @@
+1. Resumen del proyecto   
+
+Eco Moda es una plataforma web enfocada a la compra, venta, intercambio y donación de ropa de segunda mano en buen estado. Su proposito principal es promover el consumo responsable y sostenible, esto con el fin de reducir el impacto ambiental derivado de la industria textil y fomentar una economía circular basada en la reutilización. 
+
+El sistema está desarrollado con HTML, JavaScript, Node.js y MongoDB. Algunas de sus características son el manejo de usuarios, perfiles, carritos y productos, así mismo también se implementó un microservio de mensajes de texto, y una plataforma de pago. 
+
+Eco Moda está orientada a personas, familias, estudiantes y organizaciones o en la moda sostenible y en la reducción de residuos textiles. Su enfoque social y ecológico busca fortalecer comunidades y apoyar fundaciones a través de la donación y el acceso equitativo a prendas de vestir. 
+
+El proyecto contribuye directamente al cumplimiento de los Objetivos de Desarrollo Sostenible (ODS), especialmente los ODS 10 (Reducción de las desigualdades), 11 (Ciudades y comunidades sostenibles), 12 (Producción y consumo responsable) y 13 (Acción por el clima), posicionándose como una herramienta tecnológica con impacto ambiental, social y educativo. 
+
+Inspirado en la frase “Comprar es un acto moral, no solo económico” del Laudato Si’, Eco Moda representa una apuesta por un futuro más consciente, justo y sostenible en el mundo de la moda. 
+
+2. Objetivos del proyecto  
+
+Objetivo General: 
+
+Crear una plataforma que aumente la reutilización y el intercambio de ropa mediante un sistema de compra, venta y donación, promoviendo el consumo responsable y la sostenibilidad ambiental. 
+
+Objetivos Específicos: 
+
+Crear una solución tecnológica con una interfaz intuitiva y segura. 
+
+Fomentar la reutilización de prendas como alternativa sostenible frente al consumo rápido de moda. 
+
+Conectar usuarios interesados en donar, intercambiar o adquirir ropa de segunda mano en un entorno colaborativo. 
+
+Integrar un sistema de recompensas y donaciones que apoye a comunidades vulnerables y organizaciones sociales. 
+
+Promover la conciencia ambiental y social a través de la tecnología, impulsando una comunidad comprometida con la moda sostenible. 
+
+Desplegar la plataforma en infraestructura escalable con bases de datos MongoDB y MySQL. 
+
+Desarrollar la plataforma con una arquitectura definida y clara.  
+
+Generar el backend de la plataforma usando patrones GoF con el fin de generar un aplicativo más flexible. 
+
+Implementar Git Actions y sonarQube para agilizar y rectificar pruebas del sistema. 
+
+Desarrollar el proyecto siguiendo metodologías ágiles con el fin de que fuera adaptativo e iterativo. 
+
+3. Resultados obtenidos   
+
+El proyecto logró alcanzar un backend estable y funcional, con un diseño técnico basado en Node.js y MongoDB. Asimismo, se desarrolló siguiendo una serie de patrones GoF, los cuales permitieron que el sistema fuera más estable, flexible y reutilizable. Además, se implementó teniendo en cuenta diversos diagramas de diseño, como el diagrama de clases, el diagrama de despliegue, el diagrama de componentes y el diagrama de análisis. Esto fue positivo, ya que permitió comprender y desarrollar una estructura clara y modular para el sistema. 
+
+Se llegó a implementar un sistema de login y autenticación, se desarrollaron las funcionalidades de gestión de usuarios, perfiles y donaciones, y se añadió la integración de un microservicio de chat para el administrador. 
+
+En añadidura se logró implementar el sistema de git Actions el cual fue fundamental para automatizar procesos dentro del flujo de desarrollo como lo son despliegue continuo, integración continua o pruebas y métricas a partir de sonarQube, teniendo en cuenta este último es importante mencionar que el proyecto contó con cierta cobertura y buenos niveles en las diferentes métricas evaluadas, esto gracias a sus pruebas unitarias las cuales permitieron validar la funcionalidad del sistema y aumentar la fiabilidad del código. 
+
+En cuanto al uso de metodologías ágiles y trabajo en equipo se puede mencionar que se cumplió con los objetivos planteados ya que, aunque hubo discrepancias se intentó seguir de la manera más rigurosa las metodologías ágiles, lo que llevó al grupo a generar una buena comunicación interna. 
+
+Finalmente, se logró el uso de dockers para aislar la ejecución de la aplicación y el despliegue en Railway garantizó la accesibilidad del sistema y permitió evaluar su comportamiento en un entorno real, cumpliendo los objetivos establecidos en las fases de desarrollo. 
+
+4. Análisis del proceso  
+
+Durante la etapa de planificación, el equipo definió los objetivos, el alcance y el público objetivo, estableciendo una hoja de ruta clara que orientó las tareas de desarrollo. Asimismo, se asignaron roles específicos a cada integrante del grupo, entre los cuales se encontraban desarrollador de backend, frontend y bases de datos. Además, se adoptó la metodología de trabajo ágil, por lo que se designaron roles correspondientes a este enfoque, como scrum máster y equipo de desarrollo. Teniendo en cuenta todos estos aspectos, se procedió a la fase de recolección de requisitos. 
+
+En la fase de recolección de requisitos, se tomó la decisión de utilizar el método FURPS+ para obtener requisitos concisos y precisos. Estos fueron expresados mediante un conjunto de historias de usuario que abarcaban tanto los requisitos funcionales como los no funcionales. Con esto en mente, se pasó al proceso de diseño técnico, el cual se llevó a cabo a partir de cuatro diagramas diferentes para analizar el despliegue del sistema, sus componentes, clases y relaciones. 
+
+En cuanto a los aspectos técnicos, se optó por una arquitectura basada en Node.js y MongoDB, complementada con TypeScript para garantizar un tipado más estricto y controlado. La implementación se desarrolló de forma modular, abarcando funcionalidades clave como el registro y la lógica de usuarios, así como la gestión de productos y del carrito. Para esta parte, se aplicaron patrones GoF, los cuales tenían como propósito hacer que el sistema fuera más ordenado, flexible y reutilizable. 
+
+Posteriormente, se implementaron contenedores Docker con el objetivo de aislar las pruebas. Adicionalmente, se configuró GitHub Actions, donde se desarrollaron diferentes pipelines de compilación y métricas, entre las cuales se encontraba SonarQube. Con estos elementos en marcha, se realizaron pruebas unitarias y de integración, verificando la estabilidad del sistema antes de su despliegue. 
+
+5. Desafios del proyecto  
+
+Durante el desarrollo de Eco Moda, el equipo enfrentó diversos desafíos técnicos, de comunicación y estratégicos. 
+
+En cuanto a los desafíos técnicos, el equipo tuvo dificultades en la integración de las diferentes herramientas, ya que, aunque se logró la implementación, surgieron complicaciones al configurar GitHub Actions y Docker. Asimismo, se presentaron inconvenientes durante la implementación del código y la aplicación de los patrones, debido a errores en el diseño previamente elaborado. Aunque se realizaron las correcciones necesarias, estos aspectos representaron desafíos significativos para el equipo. 
+
+En segundo lugar, se presentaron problemas de comunicación en etapas tardías del proyecto, ya que durante dos semanas se dejó de lado el uso de metodologías ágiles y Scrum. Esto provocó retrasos y complicaciones en la coordinación del trabajo, afectando la organización y orientación del equipo. A pesar de que estas dificultades fueron corregidas posteriormente, es importante mencionarlas como un desafío relevante dentro del proceso. 
+
+Finalmente, en el ámbito estratégico y de configuración, se identificaron problemas en la definición y uso de los diagramas y patrones, pues al no estar claramente establecidos, se generó confusión respecto a su despliegue, lo que retrasó el desarrollo de la aplicación. Por otro lado, el manejo conjunto de MongoDB y MySQL representó un reto técnico en cuanto a la sincronización y gestión de la infraestructura. 
+
+6.Acciones de Mejora  
+
+A partir de la experiencia obtenida, se propusieron acciones concretas para fortalecer la plataforma y la comunicación en el equipo 
+
+Se propuso seguir con alto nivel de disciplina la plantación ágil, esto con el fin de no generar más retrasos o complicaciones en el desarrollo de la app. 
+
+Se decidió tener en cuenta el método de starfish para identificar las falencias del equipo y sus fortalezas, por cada spring de trabajo. 
+
+Se optó por mejorar la documentación técnica y la guía para los usuairos. 
+
+Desarrollar un frontend más robusto y responsivo, mejorando la experiencia de usuario. 
+
+Mejorar los sistemas de CI/CD para garantizar actualizaciones seguras y eficientes. 
+
+Manejar un sistema de microservicio para mantener control de los registros de usuarios. 
+
+Mejorar el backend con el fin de cumplir las métricas presentadas por SonarQube  
+
+Mejorar el desarrollo de la aplicación guiándose plenamente en los diagramas y en los patrones definidos. 
+
+Mejorar la configuración entre el backend, fromtend y base de datos para que el usuario tenga una mejor plataforma. 
+
+Cumplir a cabalidiad los requisitos del usuario, poniendo prioridades dentro de estos y dentro de las funcionalidades según si importancia. 
+
+7. Aprendizaje   
+
+El desarrollo del proyecto Eco Moda permitió ampliar las experiencias relacionadas con el trabajo en equipo, ya que, al aplicarse una gestión ágil de proyectos, fue necesario realizar reuniones semanales e incluso encuentros más breves, lo que fortaleció las competencias de comunicación y colaboración grupal. 
+
+En el aspecto técnico, se adquirió experiencia práctica en Node.js y TypeScript, además de en la implementación de sistemas de pruebas y sus componentes asociados, como GitHub Actions, Docker y las pruebas unitarias. Asimismo, se aprendió a interpretar y analizar métricas de código mediante la herramienta SonarQube, comprendiendo los criterios que las rigen. 
+
+El proyecto también fortaleció las competencias en diseño de software y en el uso de patrones, los cuales fueron fundamentales para definir una estructura de código modular, funcional y extensible. El equipo profundizó, además, en la integración de servicios externos y en el manejo de despliegues en la nube, ampliando su comprensión del ciclo completo de desarrollo de software. 
+
+Finalmente, se adquirieron habilidades en el uso de GitHub y sus herramientas, como la gestión del repositorio, el tablero, las issues, las ramas y los commits. Por último, el proyecto permitió desarrollar una mayor conciencia social, al abordar problemáticas reales de sostenibilidad y responsabilidad ambiental, inspiradas en el Laudato Si’ y los Objetivos de Desarrollo Sostenible (ODS). 
+
+8. Evaluación del equipo 
+
+El equipo demostró compromiso, responsabilidad y una colaboración constante durante todas las fases del proyecto, desde la definición de la problemática y la asignación de roles, hasta el diseño, desarrollo y despliegue de la aplicación. Aunque se presentó un desajuste durante la semana de receso, lo cual generó un desequilibrio temporal en el equipo, posteriormente se retomó el trabajo continuo de manera efectiva. 
+
+La distribución de tareas fue equitativa, tanto en la asignación de roles como en la gestión de issues y entregas dentro del proyecto. Además, la comunicación interna permitió resolver las dificultades de forma ágil y colectiva. 
+
+Se evidenció un aprendizaje mutuo en aspectos tanto técnicos como organizativos, logrando cumplir los objetivos dentro de los plazos establecidos. Asimismo, se fortalecieron las habilidades de trabajo remoto, coordinación digital y gestión colaborativa, demostrando una sólida cohesión grupal. 
+
+9.Futuro del sistema  
+
+A futuro, Eco Moda se proyecta como una plataforma con alto potencial de crecimiento técnico y social. Entre los próximos pasos se busca fortalecer su arquitectura modular, permitiendo la incorporación de nuevos microservicios orientados a la analítica, la gestión avanzada de usuarios y la optimización del flujo de compra, venta y donación. Además, se busca implementar un código que cumpla con todas las métricas y sea excalable, esto con el fin de agregarle nuevas funcionalidades conforme avance la plataforma. 
+
+Se busca también mejorar la experiencia del pusuario mediante la implementación de un frontend más dinámico y accesible, así como la integración de sistemas de recomendación basados en IA que sugieran prendas según preferencias, historial y comportamiento del usuario. 
+
+En el ámbito social, se pretende ampliar el alcance de la plataforma a nivel regional e internacional, mediante la incorporación de funcionalidades adaptadas a distintos contextos culturales. Esto permitirá posicionar a Eco Moda como una herramienta global de consumo responsable. 
+
+Además, se plantea fortalecer la colaboración con organizaciones sin ánimo de lucro y marcas sostenibles, de manera que la plataforma sirva como una conexión entre comunidades, empresas y usuarios comprometidos con la moda ética. 
+
+Finalmente, se contempla la implementación de dashboards de impacto dentro de la app, que permitan medir métricas de sostenibilidad, reducción de residuos y participación comunitaria, con el fin de evaluar el aporte real del sistema a los Objetivos de Desarrollo Sostenible (ODS). 
+
+ 
+
+10. Plan de Mantenimiento y continuidad del proyecto  
+
+Al generar la implementación y despliegue inicial, se tiene un plan de mantenimiento orientado a asegurar la estabilidad, seguridad y mejora continua del sistema. Durante esta etapa, se realizarán revisiones continuas del backend y las bases de datos, corrigiendo errores y optimizando el rendimiento general. Se actualizarán dependencias, librerías y configuraciones de entorno para mantener la compatibilidad y prevenir vulnerabilidades. 
+
+El equipo técnico será responsable de establecer rutinas automáticas de respaldo y monitoreo, así como de mantener una trazabilidad clara de los cambios mediante control de versiones y una buena práctica de desarrollo ya sea en cuanto a arquitectura, gestión, y patrones. 
+
+A mediano plazo, se prevé la adopción de un mejor sistema de integración y despliegue continuo (CI/CD), lo que facilitará la implementación de nuevas funcionalidades sin afectar la estabilidad del sistema. 
+
+Se elaborará también una guía técnica detallada que permita a futuros colaboradores o equipos de mantenimiento continuar con el desarrollo sin pérdida de información, Además, con esta guía se busca llevar constancia de todos los cambios, para facilitar la integración de nuevos elementos a la aplicación. 
+
+Finalmente, se evaluará la posibilidad de abrir el proyecto a colaboraciones externas, permitiendo que Eco Moda evolucione de manera colaborativa como una herramienta tecnológica de impacto social y ambiental sostenido. 
+
+ 
+
+11. Conclusiones  
+
+El proyecto Eco Moda muestra una integración exitosa entre tecnología, sostenibilidad y responsabilidad social. A través del desarrollo de una arquitectura sólida basada en Node.js, MongoDB y microservicios, el equipo logró generar una solución digital innovadora orientada al consumo responsable y a la economía circular. 
+
+Durante el proceso, se evidenció el valor del trabajo colaborativo y el uso de metodologías ágiles, que permitieron mantener la adaptabilidad y el enfoque iterativo del desarrollo. Asimismo, la aplicación de patrones de diseño GoF, junto con herramientas de automatización (GitHub Actions) y evaluación de calidad (SonarQube), fortaleció la mantenibilidad y fiabilidad del sistema. 
+
+Aunque se identificaron desafíos relacionados con la integración de tecnologías, la comunicación interna y la sincronización entre componentes, las soluciones implementadas demostraron la capacidad del equipo para resolver problemas de forma técnica y organizada. 
+
+En conclusión, Eco Moda no solo cumplió con sus objetivos técnicos y funcionales, sino que también logró proyectarse como un ejemplo de cómo el desarrollo de software puede ayudar a causas sociales y ambientales. Además, su enfoque, orientado a la reutilización, la educación ambiental y la innovación tecnológica, marca una base sólida para futuras iteraciones del sistema y su potencial evolución como plataforma sostenible a gran escala. 
