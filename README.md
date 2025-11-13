@@ -1,71 +1,91 @@
-﻿Proyecto: Eco Moda
+# 🌿 Eco Moda  
+**Tecnología con propósito: vistiendo el cambio hacia un futuro sostenible.**
 
+---
 
-Autores: Samuel Daza, Thomas Lopez, Esteban Navas, Samuel Velandia
+## 🌍 Descripción General  
 
-Usuario: thomaslopezro Link: https://github.com/thomaslopezro
+**Eco Moda** es una plataforma web que facilita la **compra, venta, intercambio y donación de ropa de segunda mano** en excelente estado.  
+Su misión es **promover el consumo responsable**, **reducir el impacto ambiental** de la industria textil y **apoyar comunidades vulnerables** mediante el acceso gratuito o económico a prendas de vestir.  
 
-usuario: samueldazag2 Link: https://github.com/samueldazag2
+---
 
+## 🎯 Objetivos del Proyecto  
 
+- Desarrollar una solución accesible desde cualquier dispositivo.  
+- Fomentar la reutilización de prendas como alternativa sostenible.  
+- Conectar usuarios interesados en donar, intercambiar o adquirir ropa.  
+- Apoyar organizaciones sociales mediante un sistema de donaciones.  
 
-Descripción General: Eco Moda es una plataforma web diseñada para facilitar la compra, venta, intercambio y donación de ropa de segunda mano en buen estado. Su objetivo es promover el consumo responsable, reducir el impacto ambiental de la industria textil y apoyar a comunidades vulnerables mediante el acceso gratuito o económico a prendas de vestir.
+---
 
-Objetivos del Proyecto:
+## 👥 Equipo del Proyecto  
 
-Crear una solución tecnológica accesible desde cualquier dispositivo.
+Responsables del desarrollo, diseño y despliegue de la plataforma.
 
-Fomentar la reutilización de ropa como alternativa sostenible.
+- **[Thomas López Rodríguez](https://github.com/thomaslopezro)** – *Desarrollador Backend & Líder Técnico*  
+- **[Samuel Daza García](https://github.com/samueldazag2)** – *Desarrollador Frontend & UX Designer*  
+- **Esteban Navas** – *Diseñador UI & Documentación*  
+- **Samuel Velandia** – *Gestión de Base de Datos & QA Tester*  
 
-Conectar usuarios interesados en donar, intercambiar o adquirir prendas.
+---
 
-Apoyar organizaciones sociales mediante un sistema de donaciones.
+## 🧭 Público Objetivo  
 
-Público Objetivo:
+- Personas en comunidades urbanas y locales.  
+- Familias, estudiantes y jóvenes que practican el consumo consciente.  
+- Fundaciones, hogares comunitarios y ONGs.  
+- Personas en situación de vulnerabilidad económica.  
 
-Personas en comunidades urbanas y locales.
+---
 
-Familias, estudiantes y jóvenes que practican el consumo consciente.
+## 🧠 Tecnologías Utilizadas  
 
-Fundaciones, hogares comunitarios y ONGs.
+**Frontend:** HTML, JavaScript  
+**Backend:** Node.js  
+**Bases de Datos:** MongoDB, MySQL  
 
-Personas en situación de vulnerabilidad económica.
+---
 
-Tecnologías Utilizadas: Frontend: HTML, JavaScript Backend: Node.js Base de Datos: MongoDB, MySQL Infraestructura: Railway (para implementación de bases de datos)
+## ⚙️ Funcionalidades Clave  
 
-Funcionalidades Clave:
+- Registro y gestión de usuarios con perfiles personalizados.  
+- Sistema de donaciones con generación de comprobantes.  
+- Chat en línea entre usuarios.  
+- Integración con pasarelas de pago.  
+- Sistema de recompensas por participación.  
 
-Manejo de usuarios y perfiles.
+---
 
-Sistema de donaciones con comprobantes.
+## 🌱 Impacto Esperado  
 
-Chat en línea entre usuarios.
+- Reducción significativa de desechos textiles.  
+- Ahorro económico para familias.  
+- Promoción de una cultura de reutilización y sostenibilidad.  
+- Creación de redes comunitarias globales con ONGs y marcas responsables.  
 
-Integración con portales de pago.
+---
 
-Sistema de recompensas por participación.
+## ♻️ ODS Relacionados  
 
-Impacto Esperado:
+- **ODS 10:** Reducción de las desigualdades  
+- **ODS 11:** Ciudades y comunidades sostenibles  
+- **ODS 12:** Producción y consumo responsable  
+- **ODS 13:** Acción por el clima  
 
-Reducción de desechos textiles.
+---
 
-Ahorro económico para familias.
+## 💡 Inspiración  
 
-Promoción de una cultura de reutilización.
+> “Comprar es un acto moral, no solo económico.”  
+> — *Laudato Si’*
 
-Expansión global mediante redes comunitarias y alianzas con ONGs y marcas sostenibles.
+---
 
-ODS Relacionados:
+## 🚀 Ejecución del Proyecto  
 
-ODS 10: Reducción de las desigualdades
+1. Clonar el repositorio:
 
-ODS 11: Ciudades y comunidades sostenibles
-
-ODS 12: Producción y consumo responsable
-
-ODS 13: Acción por el clima
-
-Inspiración: “Comprar es un acto moral, no solo económico.” — Laudato Si’
-
-Notas Finales: Este proyecto busca generar un cambio cultural y ecológico, integrando tecnología con responsabilidad social. Eco Moda no es solo una plataforma, sino una comunidad que transforma la forma en que consumimos moda.
-
+```bash
+git clone https://github.com/thomaslopezro/ecomoda.git
+cd ecomoda
