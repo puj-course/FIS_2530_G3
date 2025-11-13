@@ -1,0 +1,71 @@
+name: CI/CD - Tests & Docker Deploy
+
+on:
+  push:
+    branches:
+      - main     # ajusta si tu rama principal tiene otro nombre
+
+jobs:
+  test:
+    name: 🧪 Run unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repo
+        uses: actions/checkout@v4
+
+      - name: ⚙ Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🧪 Run tests with coverage
+        run: npm run test:ci
+
+      - name: 💾 Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+
+  deploy:
+    name: 🚀 Deploy to Docker server with docker compose
+    needs: test          # Solo despliega si los tests pasan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repo
+        uses: actions/checkout@v4
+
+      - name: 🔐 Setup SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+      - name: 🚀 Deploy via SSH (git pull + docker compose up)
+        run: |
+          ssh -o StrictHostKeyChecking=no -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          set -e
+
+          # Carpeta donde vive el proyecto en el servidor
+          mkdir -p /var/www/fis_2530_g3
+          cd /var/www/fis_2530_g3
+
+          # Si no hay repo, clonarlo
+          if [ ! -d .git ]; then
+            git clone https://github.com/${GITHUB_REPOSITORY}.git .
+          else
+            git pull
+          fi
+
+          # Levantar contenedores con docker compose
+          docker compose down || true
+          docker compose up -d --build
+
+          docker compose ps
+          EOF
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
